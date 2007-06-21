@@ -18,7 +18,7 @@ DESTDIR = c:/Projects/bin
 INCLUDEPATH += ../
 INCLUDEPATH += ../..
 INCLUDEPATH += ../../../
-INCLUDEPATH += c:/Projects/include
+INCLUDEPATH += c:/Projects/log4cpp-0.3.4b/include
 
 LIBS += ../Debug/skewtqt.lib
 

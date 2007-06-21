@@ -18,6 +18,7 @@ DESTDIR = ./Debug
 
 INCLUDEPATH += ../
 INCLUDEPATH += ../.. 
-INCLUDEPATH += c:/Projects/include 
+INCLUDEPATH += c:/Projects/log4cpp-0.3.4b/include
 INCLUDEPATH += c:/Projects
-INCLUDEPATH += c:/Projects/AvapsEd
+INCLUDEPATH += c:/Projects/boost_1_34_0
+
