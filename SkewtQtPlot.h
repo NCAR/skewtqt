@@ -114,9 +114,6 @@ namespace plotlib
 		/// Dtor
 		~SkewtQtPlot();
 
-  virtual void
-  setupPlotWindow(PlotWindow* pw);
-
   virtual QSize
   sizeHint() const
   {

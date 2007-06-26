@@ -178,15 +178,6 @@ SkewtQtPlot::~SkewtQtPlot()
 } // END DTOR
 
 
-void
-SkewtQtPlot::
-setupPlotWindow(PlotWindow*)
-{
-  // There is no menu modification to do here.
-  // The skew-t plot does not add a menu entry to create more plots.
-}
-
-
 QPixmap
 SkewtQtPlot::
 getPixmap()
