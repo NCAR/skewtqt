@@ -164,7 +164,20 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	stopLayout->addWidget(StopLabel);
 	stopLayout->addWidget(_stopTime);
 
+	// Initialize the dataset selection prototype and try to fill
+	// it with defaults.
 	initDataSets(getDataSource());
+
+	// Insert a default trace unless the creation token specified
+	// an empty plot.
+	if (! pc.empty())
+	{
+	  if (! _prototypeSelection->valid()) {
+	    selectDataSets();
+	  } else {
+	    implInsertTrace(*_prototypeSelection);
+	  }
+	}
 
 } // END CTOR
 
@@ -409,11 +422,6 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 		}
 	}
 
-	if (! _prototypeSelection->valid()) {
-		selectDataSets();
-	} else {
-		implInsertTrace(*_prototypeSelection);
-	}
 }
 
 
