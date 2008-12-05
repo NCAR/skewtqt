@@ -25,6 +25,9 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
   _pSkewT(0),
   _ready(false)
 {
+  // have a rubberband on hand for zooming
+  _rb = new QRubberBand(QRubberBand::Line, this);
+
   // set our background color
   QPalette palette;
   palette.setColor(backgroundRole(), QColor("white"));
@@ -54,6 +57,8 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
 //////////////////////////////////////////////////////////////////////
 SkewTAdapterQt::~SkewTAdapterQt()
 { 
+  delete(_rb);
+
   for (unsigned int i = 0; i < _pLines.size(); i++)
     delete _pLines[i];
 }
@@ -283,6 +288,7 @@ void
 SkewTAdapterQt::unzoom()
 {
   init();
+  update();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -365,7 +371,7 @@ SkewTAdapterQt::getQColor(unsigned int colorCode) {
   QColor qcolor;
   switch (colorCode) {
   case SKEWT_GREY:
-    qcolor.setNamedColor("grey75");
+    qcolor.setNamedColor("grey");
     break;
 
   case SKEWT_RED:
@@ -436,43 +442,40 @@ void
 SkewTAdapterQt::mousePressEvent( QMouseEvent* e)
 {
   _zoomStart = _zoomStop = e->pos();
+  _rb->setGeometry(QRect(_zoomStart, QSize()));
+  _rb->show();
 }
+//////////////////////////////////////////////////////////////////////
+void
+SkewTAdapterQt::mouseMoveEvent( QMouseEvent* e )
+{
+  _rb->setGeometry(QRect(_zoomStart, e->pos()).normalized());
+}
+
 
 //////////////////////////////////////////////////////////////////////
 void
 SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
 {
   _zoomStop = e->pos();
+  _rb->hide();
 
-  if( _zoomStart.x() != _zoomStop.x() && _zoomStart.y() != _zoomStop.y() ) {
-    QRubberBand rb(QRubberBand::Rectangle, this);
-
-    drawBoundingRect( &rb, _zoomStart, _zoomStop );
-
-    if (_pSkewT)
+  // Don't allow zooming to less than 20 pixels of current screen.
+  // Otherwise, blank plots appear.
+  int deltaX = abs(_zoomStart.x()-_zoomStop.x());
+  int deltaY = abs(_zoomStart.y()-_zoomStop.y());
+  if( deltaX > 20 &&  deltaY > 20) {
+    if (_pSkewT) {
       _pSkewT->zoomin();
-
+      update();
+    }
   } else {
-
-    if (_pSkewT)
+    if (_pSkewT) {
       _pSkewT->unzoom();
-
+      update();
+    }
   }
 }
-//////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::mouseMoveEvent( QMouseEvent* e )
-{
-  QRubberBand rb(QRubberBand::Rectangle, this);
-
-  if( _zoomStart.x() != _zoomStop.x() && _zoomStart.y() != _zoomStop.y() )
-    drawBoundingRect( &rb, _zoomStart, _zoomStop );
-
-  _zoomStop = e->pos();
-
-  drawBoundingRect( &rb, _zoomStart, _zoomStop );
-}
-
 //////////////////////////////////////////////////////////////////////
 void
 SkewTAdapterQt::drawBoundingRect( QRubberBand* rb, const QPoint& p1, const QPoint& p2 )

@@ -337,7 +337,8 @@ namespace skewt {
 		*/
 		void                removeElements();
 
-		VectorPlus<SkewTQtText>       _texts;         ///< Text graphic elements
+		QRubberBand*                  _rb;            ///< Rubberband used for zoming
+        VectorPlus<SkewTQtText>       _texts;         ///< Text graphic elements
 		VectorPlus<SkewTQtPolyline*>  _pLines;        ///< Polyline graphic elements. (Note that these are pointers, and so must be deleted during destruction).
 		VectorPlus<SkewTQtDatum>      _tdryPoints;    ///< Tdry datum graphic elements
 		VectorPlus<SkewTQtDatum>      _dpPoints;      ///< Dew point datum graphic elements
