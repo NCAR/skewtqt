@@ -4,24 +4,15 @@ OBJECT NAME:	SkewtQtTest.h
 
 FULL NAME:	Create a SkewtQtTest Window
 
-TYPE:		
-
-DESCRIPTION:	
-
-NOTES:		
-
-COPYRIGHT:	University Corporation for Atmospheric Research, 2003
+COPYRIGHT:	University Corporation for Atmospheric Research, 2003-2008
 -------------------------------------------------------------------------
 */
 
 #ifndef SkewtQtTest_H
 #define SkewtQtTest_H
 
-#include <qapplication.h>
-#include <qmainwindow.h>
-#include <qpopupmenu.h>
-#include <qdialog.h>
-#include <qtimer.h>
+#include <QtGui/QWidget>
+#include <QtCore/QTimer>
 
 #include "Skewt/Skewt.h"
 #include "SkewTAdapterQt.h"
@@ -34,28 +25,24 @@ public:
 	SkewtQtTest(QWidget *parent, const char* name);
   virtual ~SkewtQtTest();
 
-  public slots:
-    void            timeOut();
-    void            unzoomSlot();
+public slots:
+  void timeOut();
+  void unzoomSlot();
 
 protected:
+  void makeData();
 
-  void              makeData();
-
-  skewt::SkewTAdapterQt*   _skewtAdapter;
-  skewt::SkewT*            _skewt;
-  QTimer            _timer;
+  skewt::SkewTAdapterQt* _skewtAdapter;
+  skewt::SkewT* _skewt;
+  QTimer _timer;
   
   int _n;
-  double*           _pres;
-  double*           _tdry;
-  double*           _rh;
-  double*           _wspd;
-  double*           _wdir;
-  double            _lastPres;
-
-  
-
+  double* _pres;
+  double* _tdry;
+  double* _rh;
+  double* _wspd;
+  double* _wdir;
+  double  _lastPres;
 };
 
 #endif

@@ -10,7 +10,7 @@ COPYRIGHT:	University Corporation for Atmospheric Research, 2003-2004
 -------------------------------------------------------------------------
 */
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qapplication.h>
 #include "SkewtQtTest.h"
 
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
-  QVBox mainWindow;
+  Q3VBox mainWindow;
   mainWindow.show();
 
   SkewtQtTest skewtTest(&mainWindow, "skewtTest");

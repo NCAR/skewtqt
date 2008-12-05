@@ -9,14 +9,12 @@
 #include "SkewT/SkewT.h"
 #include "SkewTAdapterQt.h"
 
-#include <qwidget.h>
-#include <qtimer.h>
-#include <qlayout.h>
 #include <datastore/DateTime.h>
 
 #include <set>
 
 class QLabel;
+class QBoxLayout;
 
 /* -------------------------------------------------------------------- */
 namespace plotlib
@@ -171,8 +169,8 @@ namespace plotlib
 		///
 		void unzoomSlot();
 
-		/// Create a DataSetSelectWin, initialized with the existing known
-		/// DataSet values. A signal from the DataSetSelectWin is connected to
+		/// Create a DataSetSelectionDialog, initialized with the existing known
+		/// DataSet values. A signal from the DataSetSelectionDialog is connected to
 		/// changeDataSets(std::vector<const datastore::DataSet*>& dsv), so that this
 		/// function will be called when/if the user has finished the selection.
 		void selectDataSets();

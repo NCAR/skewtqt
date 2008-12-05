@@ -26,3 +26,4 @@ LIBS += ../Debug/skewtqt.lib
 LIBS += c:/Binaries/Aspen/lib/Debug/SkewT.lib
  
 
+QT +=  qt3support 

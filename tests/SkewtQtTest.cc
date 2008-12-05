@@ -4,6 +4,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
+#include <QVBoxLayout>
 
 SkewtQtTest::SkewtQtTest(QWidget* parent, const char* name)
   {

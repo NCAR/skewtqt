@@ -3,18 +3,17 @@
 #include <datastore/DataSource.h>
 #include <datastore/DataSet.h>
 #include <datastore/DataSetSelection.h>
-#include "plotlib/DataSetSelectWin.h"
+#include "plotlib/DataSetSelectionDialog.h"
 #include "PlotFactoryP.h"
 
-#include <qcursor.h>
-#include <qinputdialog.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qprinter.h>
-#include <qpushbutton.h>
-#include <qpopupmenu.h>
+#include <QtGui/QMenu>
+#include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QInputDialog>
+#include <QtCore/QEvent>
 
-#undef DEBUG
 #include "logx/Logging.h"
 
 LOGGING("plotlib.SkewtQtPlot");
@@ -49,94 +48,112 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 
 	// use the Plot widget to put everthing into.
 	_topWidget		= new QWidget(this);
+    _topWidget = this;
 
 	// creat the layouts
-	QBoxLayout* mainLayout	= new QVBoxLayout(_topWidget);
+	QVBoxLayout* mainLayout	     = new QVBoxLayout;
+	_plotLayout		             = new QVBoxLayout;
+	QVBoxLayout* statusLayout    = new QVBoxLayout;
+	QHBoxLayout* dataLayout	     = new QHBoxLayout;
+	QBoxLayout* pointCountLayout = new QHBoxLayout;
+	QBoxLayout* presLayout	     = new QHBoxLayout;
+	QBoxLayout* tdryLayout	     = new QHBoxLayout;
+	QBoxLayout* rhLayout	     = new QHBoxLayout;
+	QBoxLayout* wspdLayout	     = new QHBoxLayout;
+	QBoxLayout* wdirLayout	     = new QHBoxLayout;
+	QBoxLayout* timeLayout	     = new QHBoxLayout;
+	QBoxLayout* startLayout	     = new QHBoxLayout;
+	QBoxLayout* stopLayout	     = new QHBoxLayout;
 
-	_plotLayout		= new QVBoxLayout(mainLayout);
-	QBoxLayout* statusLayout   = new QVBoxLayout(mainLayout);
+	// assign the layouts
+    if (layout()) {
+        delete layout();
+    }
+    this->setLayout(mainLayout);
 
-	QBoxLayout* dataLayout	= new QHBoxLayout(statusLayout);
+	mainLayout->addLayout(_plotLayout);
+	mainLayout->addLayout(statusLayout);
 
-	QBoxLayout* pointCountLayout = new QHBoxLayout(dataLayout);
-	QBoxLayout* presLayout	= new QHBoxLayout(dataLayout);
-	QBoxLayout* tdryLayout	= new QHBoxLayout(dataLayout);
-	QBoxLayout* rhLayout	= new QHBoxLayout(dataLayout);
-	QBoxLayout* wspdLayout	= new QHBoxLayout(dataLayout);
-	QBoxLayout* wdirLayout	= new QHBoxLayout(dataLayout);
+	statusLayout->addLayout(dataLayout);
+	statusLayout->addLayout(timeLayout);
 
-	QBoxLayout* timeLayout	= new QHBoxLayout(statusLayout);
+	dataLayout->addLayout(pointCountLayout);
+	dataLayout->addLayout(presLayout);
+	dataLayout->addLayout(tdryLayout);
+	dataLayout->addLayout(rhLayout);
+	dataLayout->addLayout(wspdLayout);
+	dataLayout->addLayout(wdirLayout);
 
-	QBoxLayout* startLayout	= new QHBoxLayout(timeLayout);
+	timeLayout->addLayout(startLayout);
+	timeLayout->addLayout(stopLayout);
 
-	QBoxLayout* stopLayout	= new QHBoxLayout(timeLayout);
-
-	// create the skew-t artifacts: the skewt itself, and a graphics adapter for Qt usage.
+	// create the skew-t artifacts: the skewt itself, and a graphics
+	// adapter for Qt usage.
 	newSkewT();
 
 	// create the static label widgets
-	QLabel* pointLabel = new QLabel( "Points:", _topWidget);
+	QLabel* pointLabel = new QLabel( "Points:", 0);
 	pointLabel->setAlignment(Qt::AlignRight);
 	pointLabel->setSizePolicy(MinMin);
 
-	QLabel* presLabel = new QLabel( "Pressure:", _topWidget);
+	QLabel* presLabel = new QLabel( "Pressure:", 0);
 	presLabel->setAlignment(Qt::AlignRight);
 	presLabel->setSizePolicy(MinMin);
 
-	QLabel* tdryLabel = new QLabel( "Temperature:", _topWidget);
+	QLabel* tdryLabel = new QLabel( "Temperature:", 0);
 	tdryLabel->setAlignment(Qt::AlignRight);
 	tdryLabel->setSizePolicy(MinMin);
 
-	QLabel* RHLabel = new QLabel( "RH: ", _topWidget);
+	QLabel* RHLabel = new QLabel( "RH: ", 0);
 	RHLabel->setAlignment(Qt::AlignRight);
 	RHLabel->setSizePolicy(MinMin);
 
-	QLabel* WspdLabel = new QLabel( "Wind Speed: ", _topWidget);
+	QLabel* WspdLabel = new QLabel( "Wind Speed: ", 0);
 	WspdLabel->setAlignment(Qt::AlignRight);
 	WspdLabel->setSizePolicy(MinMin);
 
-	QLabel* WdirLabel = new QLabel( "Wind Dir: ", _topWidget);
+	QLabel* WdirLabel = new QLabel( "Wind Dir: ", 0);
 	WdirLabel->setAlignment(Qt::AlignRight);
 	WdirLabel->setSizePolicy(MinMin);
 
-	QLabel* StartLabel = new QLabel( "Start: ", _topWidget);
+	QLabel* StartLabel = new QLabel( "Start: ", 0);
 	StartLabel->setAlignment(Qt::AlignRight);
 	StartLabel->setSizePolicy(MinMin);
 
-	QLabel* StopLabel = new QLabel( "Stop: ", _topWidget);
+	QLabel* StopLabel = new QLabel( "Stop: ", 0);
 	StopLabel->setAlignment(Qt::AlignRight);
 	StopLabel->setSizePolicy(MinMin);
 
 	// create the status widgets that will be updated in real-time
-	_pointCount = new QLabel( "", _topWidget);
+	_pointCount = new QLabel( "", 0);
 	_pointCount->setAlignment(Qt::AlignLeft);
 	_pointCount->setSizePolicy(MinMin);
 
-	_pressure = new QLabel( "", _topWidget);
+	_pressure = new QLabel( "", 0);
 	_pressure->setAlignment(Qt::AlignLeft);
 	_pressure->setSizePolicy(MinMin);
 
-	_tdry = new QLabel( "", _topWidget);
+	_tdry = new QLabel( "", 0);
 	_tdry->setAlignment(Qt::AlignLeft);
 	_tdry->setSizePolicy(MinMin);
 
-	_RH = new QLabel( "", _topWidget);
+	_RH = new QLabel( "", 0);
 	_RH->setAlignment(Qt::AlignLeft);
 	_RH->setSizePolicy(MinMin);
 
-	_wspd = new QLabel( "", _topWidget);
+	_wspd = new QLabel( "", 0);
 	_wspd->setAlignment(Qt::AlignLeft);
 	_wspd->setSizePolicy(MinMin);
 
-	_wdir = new QLabel( "", _topWidget);
+	_wdir = new QLabel( "", 0);
 	_wdir->setAlignment(Qt::AlignLeft);
 	_wdir->setSizePolicy(MinMin);
 
-	_startTime = new QLabel( "", _topWidget);
+	_startTime = new QLabel( "", 0);
 	_startTime->setAlignment(Qt::AlignLeft);
 	_startTime->setSizePolicy(MinMin);
 
-	_stopTime = new QLabel( "", _topWidget);
+	_stopTime = new QLabel( "", 0);
 	_stopTime->setAlignment(Qt::AlignLeft);
 	_stopTime->setSizePolicy(MinMin);
 
@@ -168,7 +185,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	// it with defaults.
 	initDataSets(getDataSource());
 
-	// Insert a default trace unless the creation token specified
+    // Insert a default trace unless the creation token specified
 	// an empty plot.
 	if (! pc.empty())
 	{
@@ -219,7 +236,8 @@ SkewtQtPlot::newSkewT()
 
 	QSizePolicy ExpExp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	_pSkewTAdapter = new skewt::SkewTAdapterQt(_topWidget, symbolSize);
+	_pSkewTAdapter = new skewt::SkewTAdapterQt(this, symbolSize);
+    _pSkewTAdapter->show();
 	_pSkewTAdapter->setSizePolicy(ExpExp);
 	_pSkewTAdapter->installEventFilter(this);
 
@@ -252,9 +270,9 @@ SkewtQtPlot::changeTraceWidth()
 
   bool  ok;
 
-  width = QInputDialog::getInteger(
+  width = QInputDialog::getInteger(this,
 		"Set symbol size", "Symbol size (pixels):",
-		width, 0, 100, 1, &ok, this );
+		width, 0, 100, 1, &ok );
 
   if (ok)
   {
@@ -442,13 +460,13 @@ SkewtQtPlot::selectDataSets() {
 	if (dlist.size() == 1)
 	{
 		dlist[0]->_action = SA_REPLACE;
-		popupDataSetSelectWin(*(dlist[0]));
+		popupDataSetSelectionDialog(*(dlist[0]));
 	}
 	else
 	{
 		boost::scoped_ptr<DataSetSelection> dss(createSelection());
 		dss->_action = SA_INSERT;
-		popupDataSetSelectWin(*dss);
+		popupDataSetSelectionDialog(*dss);
 	}
 }
 
@@ -502,12 +520,12 @@ implReplaceTrace(const datastore::DataSetSelection& dss) {
 /* -------------------------------------------------------------------- */
 void SkewtQtPlot::popupPlotContextMenu()
 {
-	QPopupMenu popup(this);
+  QMenu popup(this);
 
-	popup.insertItem("Change Variables...", this, SLOT(selectDataSets()));
-	popup.insertItem("Change Trace Width...", this, SLOT(changeTraceWidth()));
-	popup.insertItem("Undo Zoom", this, SLOT(unzoomSlot()));
-	popup.exec(QCursor::pos());
+  popup.addAction("Change Variables...", this, SLOT(selectDataSets()));
+  popup.addAction("Change Trace Width...", this, SLOT(changeTraceWidth()));
+  popup.addAction("Undo Zoom", this, SLOT(unzoomSlot()));
+  popup.exec(QCursor::pos());
 }
 
 /* -------------------------------------------------------------------- */
@@ -519,8 +537,8 @@ SkewtQtPlot::eventFilter(QObject *object, QEvent *e)
 	// the context menu.
 
 	if (e->type() == QEvent::MouseButtonPress) {
-		ButtonState b = ((QMouseEvent*)e)->button();
-		if ( b == Qt::RightButton)
+		Qt::MouseButton b = ((QMouseEvent*)e)->button();
+		if (b == Qt::RightButton)
 		{
 			popupPlotContextMenu();
 			return true;

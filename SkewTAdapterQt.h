@@ -9,15 +9,18 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtGui/QPen>
+#include <QtGui/QWidget>
+
 #include "SkewT/SkewT.h"
 #include "SkewT/SkewTAdapter.h"
-#include <qwidget.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qprinter.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qtimer.h>
+
+class QRubberBand;
+class QPaintEvent;
+class QMouseEvent;
+class QResizeEvent;
 
 namespace skewt {
 
@@ -26,14 +29,14 @@ namespace skewt {
 	* SkewTAdapterQt is derived from both SkewTAdapter and QWidget.
 	*
 	* The QWidget provides a blank area that the skew-t will be drawn. A QPainter performs the
-	* actual drawing. Fortunately, QPainter provides an adequate collection of primitives 
-	* for drawing polylines, text, etc. 
+	* actual drawing. Fortunately, QPainter provides an adequate collection of primitives
+	* for drawing polylines, text, etc.
 	*
 	* At the heart of this adapter, all drawing activities are broken down into a small
 	* number of graphic elements. These are strictly graphic constructs; SkewTAdapterQt
 	* really has very little (but some) specialized knowledge of what a skew-t graph is.
 	*
-	* All coordinates are given as a value between 0 and 1. Whenever drawing takse place, 
+	* All coordinates are given as a value between 0 and 1. Whenever drawing takse place,
 	* these are converted to screen coordinates through scaling by the QWidget height or
 	* width.
 	*
@@ -65,27 +68,27 @@ namespace skewt {
 	* sent as the user drags the window border. This is seen to happen
 	* when the SkewtAdapterQt is managed as by a layout, within a workspace widget.
 	*
-	* A workaround is employed here, at least until we find a way to eliminate the sending of multiple 
-	* paint events. (Trolltech said that they might add this capability to QWorkspace for us, in a 
+	* A workaround is employed here, at least until we find a way to eliminate the sending of multiple
+	* paint events. (Trolltech said that they might add this capability to QWorkspace for us, in a
 	* post Qt 4.0 version!).
 	*
 	* The technique uses a timer and a "dontPaint" flag. If the dontPaint flag is true, a paint event will
-	* not redraw the display. Every time a resize event occurs, dontPaint is set true, and the timer is started. 
-	* The dontPaint flag will continue to be set true as long as resize events are received before the timer 
-	* run out. When the timer finally is able to time out, dontPaint is returned to its false state, and a redraw is 
+	* not redraw the display. Every time a resize event occurs, dontPaint is set true, and the timer is started.
+	* The dontPaint flag will continue to be set true as long as resize events are received before the timer
+	* run out. When the timer finally is able to time out, dontPaint is returned to its false state, and a redraw is
 	* initiated.
 	*
 	* SkewTAdapterQt provides zooming support. When it detects a mouse press it captures the starting position.
 	* Then it draws a box as the mouse is dragged. When the mouse is released, the stop position is recorded,
-	* and then calls the SkewT::zoomin() function. Thus, this adapter does know about the SkewT.  
+	* and then calls the SkewT::zoomin() function. Thus, this adapter does know about the SkewT.
 	* We could have built an opaque interface to hide SkewT from the adapter, but it doesn't seem necessary.
-	* 
-	* 
+	*
+	*
 	* @todo Investigate whether QCanvas would be a better graphics component for this application.
-	* @todo Find out if a QPainter can be interrogated for the device limits (width and height). It seems 
+	* @todo Find out if a QPainter can be interrogated for the device limits (width and height). It seems
 	* foolish to have to send a QPainter, and width and height, into the draw functions.
 	* @todo The paint event handler gets called no fewer than 4 times during the initial construction, and this is after
-	* all of the graphic elements have been defined. Since draw_finished() is called from paintEvent(). 
+	* all of the graphic elements have been defined. Since draw_finished() is called from paintEvent().
 	* the complete plot is drawn four times in a row. The drawing procedure should be modified, to draw into a
 	* QPixmap, and then just have paintEvent() bitBlt this pixmap.
 	*/
@@ -97,7 +100,7 @@ namespace skewt {
 	public:
 
 		/**
-		* Construct the adapter. 
+		* Construct the adapter.
 		* @param parent The parent for the QWidget.
 		* @param symbolSize The size, in pixels, that symbols will be drawn at.
 		* @param resizeHoldOffMs The delay time, after a resize event, before a paint event can be performed.
@@ -159,6 +162,21 @@ namespace skewt {
 		void resizeTimeout();
 
 	protected:
+        /**
+        * A little helper class which carries along extra fields that can 
+        * be used by clients for whatever they need.
+        */
+        template <class T> 
+        class VectorPlus: public std::vector<T> {
+        public:
+            VectorPlus() {_int1 = 0;};
+            virtual ~VectorPlus() {};
+            virtual void clear() {
+                _int1 = 0;
+                std::vector<T>::clear();
+            };
+            int _int1;
+        };
 
 		/**
 		* A text graphic element.
@@ -183,7 +201,7 @@ namespace skewt {
 			* Destructor
 			*/
 			virtual ~SkewTQtText();
-			/** 
+			/**
 			* Draw the text.
 			* @param painter The device to draw on.
 			* @param width The width of the drawing area.
@@ -215,7 +233,7 @@ namespace skewt {
 			* Destructor
 			*/
 			virtual ~SkewTQtPolyline();
-			/** 
+			/**
 			* Draw the polyline.
 			* @param painter The device to draw on.
 			* @param width The width of the drawing area.
@@ -230,7 +248,7 @@ namespace skewt {
 		};
 
 		/**
-		* A graphic element, used to represent a data point. A collection 
+		* A graphic element, used to represent a data point. A collection
 		* of SkewTQtDatum will represent the tdry trace; another collection
 		* will represent the dew point trace.
 		*/
@@ -249,7 +267,7 @@ namespace skewt {
 			* Destructor.
 			*/
 			virtual ~SkewTQtDatum();
-			/** 
+			/**
 			* Draw the datum.
 			* @param painter The device to draw on.
 			* @param width The width of the drawing area.
@@ -265,14 +283,14 @@ namespace skewt {
 		};
 
 		/**
-		* Called by Qt when there is a paint event. The display will be 
+		* Called by Qt when there is a paint event. The display will be
 		* cleared, and all of the grphic elements will be redrawn.
 		* @param e The paint event
 		*/
 		void                paintEvent(QPaintEvent *e);
 		/**
 		* Called by Qt when there is a resize event. The dontPaint flag is set true, and
-		* a timer is initiated. When the timer completes, the dontPaint flag is cleared 
+		* a timer is initiated. When the timer completes, the dontPaint flag is cleared
 		* and update() is called to generate  a paint event.
 		*@param e Resize event.
 		*/
@@ -292,7 +310,7 @@ namespace skewt {
 		/**
 		* Draw the rubberband rectangle as the mouse is dragged.
 		*/
-		void drawBoundingRect( QPainter* p, const QPoint& p1, const QPoint& p2 );
+		void drawBoundingRect( QRubberBand* p, const QPoint& p1, const QPoint& p2 );
 		/**
 		* Return the QColor equivalent of the SkewT color code. See SkewTdefs.h
 		* @return The coresponding QColor.
@@ -307,11 +325,11 @@ namespace skewt {
 		*/
 		void                removeElements();
 
-		std::vector<SkewTQtText>      _texts;         ///< Text graphic elements
-		std::vector<SkewTQtPolyline*> _pLines;        ///< Polyline graphic elements. (Note that these are pointers, and so must be deleted during destruction).
-		std::vector<SkewTQtDatum>     _tdryPoints;    ///< Tdry datum graphic elements
-		std::vector<SkewTQtDatum>     _dpPoints;      ///< Dew point datum graphic elements
-		std::vector<SkewTQtDatum>     _symbols;       ///< Symbol datum graphic elements
+		VectorPlus<SkewTQtText>       _texts;         ///< Text graphic elements
+		VectorPlus<SkewTQtPolyline*>  _pLines;        ///< Polyline graphic elements. (Note that these are pointers, and so must be deleted during destruction).
+		VectorPlus<SkewTQtDatum>      _tdryPoints;    ///< Tdry datum graphic elements
+		VectorPlus<SkewTQtDatum>      _dpPoints;      ///< Dew point datum graphic elements
+		VectorPlus<SkewTQtDatum>      _symbols;       ///< Symbol datum graphic elements
 		SkewTQtText                   _title;         ///< The title text; appears top center, first line.
 		SkewTQtText                   _subTitle;      ///< The sub title text, appears top center, second line
 
@@ -339,8 +357,8 @@ namespace skewt {
 		QPoint              _zoomStop;                ///< The position of the mouse when a mouse release event occurs.
 		SkewT*              _pSkewT;                  ///< Set to the SkewT that we are controlling, if zooming is desired. Null otherwise.
 
-		bool                _ready;                   ///< Set true after SkewT calls draw_finished(). 
+		bool                _ready;                   ///< Set true after SkewT calls draw_finished().
 	};
 }
 
-#endif 
+#endif
