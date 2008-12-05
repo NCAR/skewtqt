@@ -234,29 +234,29 @@ SkewTAdapterQt::drawElements()
 
   _subTitle.draw(painter, w, h);
 
-  for (unsigned int i = _pLines._int1; i < _pLines.size(); i++) {
+  for (unsigned int i = _pLines._next; i < _pLines.size(); i++) {
     _pLines[i]->draw(painter,w, h);
-    _pLines._int1 = _pLines.size();
+    _pLines._next = _pLines.size();
   }
 
-  for (unsigned int j = _tdryPoints._int1; j < _tdryPoints.size(); j++) {
+  for (unsigned int j = _tdryPoints._next; j < _tdryPoints.size(); j++) {
     _tdryPoints[j].draw(painter, w, h);
-    _tdryPoints._int1 = _tdryPoints.size();
+    _tdryPoints._next = _tdryPoints.size();
   }
 
-  for (unsigned int d = _dpPoints._int1; d < _dpPoints.size(); d++) {
+  for (unsigned int d = _dpPoints._next; d < _dpPoints.size(); d++) {
     _dpPoints[d].draw(painter, w, h);
-    _dpPoints._int1 = _dpPoints.size();
+    _dpPoints._next = _dpPoints.size();
   }
 
-  for (unsigned int t = _texts._int1; t < _texts.size(); t++) {
+  for (unsigned int t = _texts._next; t < _texts.size(); t++) {
     _texts[t].draw(painter, w, h);
-    _texts._int1 = _texts.size();
+    _texts._next = _texts.size();
   }
 
-  for (unsigned int s = _symbols._int1; s < _symbols.size(); s++) {
+  for (unsigned int s = _symbols._next; s < _symbols.size(); s++) {
     _symbols[s].draw(painter, w, h);
-    _symbols._int1 = _symbols.size();
+    _symbols._next = _symbols.size();
   }
 
   painter.end();
@@ -409,6 +409,13 @@ SkewTAdapterQt::resizeTimeout()
   // The resize timer finally timed out, so the resizing must be done.
   // Enable painting, and trigger a paint event via update().
   _dontPaint = false;
+   
+  // Reset the start of rendering so that the entire dataset is redrawn.
+  _pLines._next     = 0;
+  _tdryPoints._next = 0;
+  _dpPoints._next   = 0;
+  _texts._next      = 0;
+  _symbols._next    = 0;
 
   update();
 }
@@ -483,14 +490,11 @@ SkewTAdapterQt::removeElements()
 
   for (unsigned int i = 0; i < _pLines.size(); i++)
     delete _pLines[i];
+
   _pLines.clear();
-
   _tdryPoints.clear();
-
   _dpPoints.clear();
-
   _symbols.clear();
-
   _texts.clear();
 
 }

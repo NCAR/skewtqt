@@ -46,13 +46,15 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QSizePolicy MinMin(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	QSizePolicy ExpExp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	// use the Plot widget to put everthing into.
-	_topWidget		= new QWidget(this);
-    _topWidget = this;
+	// assign the layouts
+    if (layout()) {
+        // get rid of the Plot::QWidget layout, if it has one.
+        delete layout();
+    }
 
-	// creat the layouts
+	// create our layouts
 	QVBoxLayout* mainLayout	     = new QVBoxLayout;
-	_plotLayout		             = new QVBoxLayout;
+	_plotLayout	            	 = new QVBoxLayout;
 	QVBoxLayout* statusLayout    = new QVBoxLayout;
 	QHBoxLayout* dataLayout	     = new QHBoxLayout;
 	QBoxLayout* pointCountLayout = new QHBoxLayout;
@@ -65,10 +67,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QBoxLayout* startLayout	     = new QHBoxLayout;
 	QBoxLayout* stopLayout	     = new QHBoxLayout;
 
-	// assign the layouts
-    if (layout()) {
-        delete layout();
-    }
+    // Set mainlayout as the layout for Plot::QWidget.
     this->setLayout(mainLayout);
 
 	mainLayout->addLayout(_plotLayout);
@@ -208,6 +207,7 @@ SkewtQtPlot::~SkewtQtPlot()
 } // END DTOR
 
 
+/* -------------------------------------------------------------------- */
 QPixmap
 SkewtQtPlot::
 getPixmap()

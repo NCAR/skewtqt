@@ -163,19 +163,31 @@ namespace skewt {
 
 	protected:
         /**
-        * A little helper class which carries along extra fields that can 
-        * be used by clients for whatever they need.
+        * A little helper class which carries along extra information
+        * that contain some rendering state. This is useful for managing
+        * incremental plotting of the various elements of the plot.
         */
         template <class T> 
         class VectorPlus: public std::vector<T> {
         public:
-            VectorPlus() {_int1 = 0;};
+            /// Consructor
+            VectorPlus() {
+                _next = 0;
+            };
+            /// Destructor
             virtual ~VectorPlus() {};
+            /// remove all items and reset the next draw index.
             virtual void clear() {
-                _int1 = 0;
+                _next = 0; 
                 std::vector<T>::clear();
             };
-            int _int1;
+            /// The next item in the vector that needs to be drawn.
+            /// The rendering routine will start at this index,
+            /// render all objects up to the end of the vector,
+            /// and set this to one plus the last index. 
+            /// Routines that want to force rendering from the beginning
+            /// such as after a zoom or resize, will reset this to zero.
+            int _next;
         };
 
 		/**

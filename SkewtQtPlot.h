@@ -128,8 +128,7 @@ namespace plotlib
    getPixmap();
 
     /// Create a new skewt plot; one which does not have any data displayed yet. If
-    /// a SkewtT and its SkewTQtAdapter already exist, delete them first. The adapter is
-    /// a child of _topWidget, and will be inserted into _plotLayout.
+    /// a SkewtT and its SkewTQtAdapter already exist, delete them first. 
     void newSkewT();
   
     /// this function is called when there is new data to be plotted. It assumes that
@@ -209,9 +208,8 @@ namespace plotlib
 		/// The prototype DataSetSelection for a skew-t trace
 		datastore::DataSetSelection* _prototypeSelection;
 
-		QBoxLayout*      _plotLayout;       ///< The skewt plot layout; keep it around since SkewTQtAdapter will be recreated.
-		QWidget*         _topWidget;        ///< The top widget; keep it around since SkewTQtAdapter will be recreated.
-		QLabel*          _pointCount;       ///< Realtime values of will be displayed here.
+		QLayout*         _plotLayout;       ///<  Layout that holds the skewt.
+        QLabel*          _pointCount;       ///< Realtime values of point count will be displayed here.
 		QLabel*          _pressure;         ///< Realtime values of pressure will be displayed here.
 		QLabel*          _tdry;             ///< Realtime values of temperature will be displayed here.
 		QLabel*          _RH;               ///< Realtime values of rh will be displayed here.
