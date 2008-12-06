@@ -9,6 +9,7 @@
 #include <QtGui/QPolygon>
 #include <QtGui/QPrinter>
 #include <QtGui/QRubberBand>
+#include <QtGui/QApplication>
 
 using namespace skewt;
 
@@ -202,6 +203,7 @@ void SkewTAdapterQt::addTdry(double x, double y)
   // save it
   _tdryPoints.push_back(t);
 
+  //draw it
   drawElements(true);
 }
 
@@ -214,8 +216,8 @@ void SkewTAdapterQt::addDp(double x, double y)
   // save it
   _dpPoints.push_back(t);
 
+  //draw it
   drawElements(true);
-
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -303,8 +305,10 @@ SkewTAdapterQt::maximize()
 void
 SkewTAdapterQt::unzoom()
 {
+  QApplication::setOverrideCursor(Qt::WaitCursor);
   init();
   drawElements();
+  QApplication::restoreOverrideCursor();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -430,7 +434,9 @@ SkewTAdapterQt::resizeTimeout()
 {
   // The resize timer finally timed out, so the resizing must be done.
   _dontPaint = false;
+  QApplication::setOverrideCursor(Qt::WaitCursor);
   drawElements(); 
+  QApplication::restoreOverrideCursor();
 }
 
 
@@ -477,8 +483,10 @@ SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
   int deltaY = abs(_zoomStart.y()-_zoomStop.y());
   if( deltaX > 20 &&  deltaY > 20) {
     if (_pSkewT) {
+      QApplication::setOverrideCursor(Qt::WaitCursor);
       _pSkewT->zoomin();
       drawElements();
+      QApplication::restoreOverrideCursor();
     }
   }
 }

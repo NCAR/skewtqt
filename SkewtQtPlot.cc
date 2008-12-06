@@ -259,7 +259,9 @@ SkewtQtPlot::newSkewT()
 void
 SkewtQtPlot::unzoomSlot()
 {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 	_pSkewT->unzoom();
+    QApplication::restoreOverrideCursor();
 }
 
 /* -------------------------------------------------------------------- */
@@ -276,10 +278,12 @@ SkewtQtPlot::changeTraceWidth()
 
   if (ok)
   {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     DLOG << "changeTraceWidth, new width = " << width;
     _pSkewTAdapter->setSymbolSize(width);
     newSkewT();
     replot(DataNotice());
+    QApplication::restoreOverrideCursor();
   }
 }
 
