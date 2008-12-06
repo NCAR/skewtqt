@@ -46,9 +46,9 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QSizePolicy MinMin(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	QSizePolicy ExpExp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	// assign the layouts
     if (layout()) {
-        // get rid of the Plot::QWidget layout, if it has one.
+        // get rid of the Plot::QWidget layout, if it has one,
+        // so that we can select our own type.
         delete layout();
     }
 
@@ -67,7 +67,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QBoxLayout* startLayout	     = new QHBoxLayout;
 	QBoxLayout* stopLayout	     = new QHBoxLayout;
 
-    // Set mainlayout as the layout for Plot::QWidget.
+    // Set our layout for Plot::QWidget.
     this->setLayout(mainLayout);
 
 	mainLayout->addLayout(_plotLayout);
@@ -76,15 +76,23 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	statusLayout->addLayout(dataLayout);
 	statusLayout->addLayout(timeLayout);
 
-	dataLayout->addLayout(pointCountLayout);
+    dataLayout->addLayout(pointCountLayout);
+	dataLayout->addStretch();
 	dataLayout->addLayout(presLayout);
+	dataLayout->addStretch();
 	dataLayout->addLayout(tdryLayout);
+	dataLayout->addStretch();
 	dataLayout->addLayout(rhLayout);
+	dataLayout->addStretch();
 	dataLayout->addLayout(wspdLayout);
+	dataLayout->addStretch();
 	dataLayout->addLayout(wdirLayout);
 
+    timeLayout->addStretch();
 	timeLayout->addLayout(startLayout);
+    timeLayout->addStretch();
 	timeLayout->addLayout(stopLayout);
+    timeLayout->addStretch();
 
 	// create the skew-t artifacts: the skewt itself, and a graphics
 	// adapter for Qt usage.
