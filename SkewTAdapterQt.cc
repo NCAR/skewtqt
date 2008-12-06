@@ -100,8 +100,8 @@ SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int co
       SkewTQtPolyline* pl = new SkewTQtPolyline(_xvals, _yvals, qpen);
       _pLines.push_back(pl);
 
-      int h = height();
-      int w = width();
+      // int h = height();
+      // int w = width();
 
       _xvals.clear();
       _yvals.clear();
@@ -165,8 +165,8 @@ SkewTAdapterQt::Text(const std::string &s, const double x, const double y, unsig
   // save it
   _texts.push_back(t);
 
-  int h = height();
-  int w = width();
+  // int h = height();
+  // int w = width();
 
 }
 
