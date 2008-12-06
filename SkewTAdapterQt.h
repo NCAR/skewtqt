@@ -295,15 +295,16 @@ namespace skewt {
 		};
 
 		/**
-		* Called by Qt when there is a paint event. The display will be
-		* cleared, and all of the grphic elements will be redrawn.
+		* Called by Qt when there is a paint event. The pixmap 
+        * will be copied to the widget.
 		* @param e The paint event
 		*/
 		void                paintEvent(QPaintEvent *e);
 		/**
 		* Called by Qt when there is a resize event. The dontPaint flag is set true, and
-		* a timer is initiated. When the timer completes, the dontPaint flag is cleared
-		* and update() is called to generate  a paint event.
+		* a timer is initiated. When the timer completes, the dontPaint flag is cleared,
+        * the skewt elements are rendered into the pixmap, and an update() is called to 
+        * generate a paint event.
 		*@param e Resize event.
 		*/
 		void                resizeEvent(QResizeEvent *e);
