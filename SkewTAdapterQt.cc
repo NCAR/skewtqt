@@ -28,6 +28,8 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
   // have a rubberband on hand for zooming
   _rb = new QRubberBand(QRubberBand::Line, this);
 
+  _pixmap = new QPixmap(1,1);
+
   // set our background color
   QPalette palette;
   palette.setColor(backgroundRole(), QColor("white"));
@@ -58,6 +60,7 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
 SkewTAdapterQt::~SkewTAdapterQt()
 { 
   delete(_rb);
+  delete _pixmap;
 
   for (unsigned int i = 0; i < _pLines.size(); i++)
     delete _pLines[i];
@@ -174,20 +177,12 @@ SkewTAdapterQt::init()
     delete _pLines[i];
 
   _pLines.clear();
-
   _tdryPoints.clear();
-
   _dpPoints.clear();
-
   _texts.clear();
-
   _symbols.clear();
-
-  // This can only happen in a paintEvent() as of Qt4.
-  // this->erase();
-
+  _pixmap->fill();
   _ready = false;
-
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -207,9 +202,7 @@ void SkewTAdapterQt::addTdry(double x, double y)
   // save it
   _tdryPoints.push_back(t);
 
-  int h = height();
-  int w = width();
-
+  drawElements(true);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -221,11 +214,13 @@ void SkewTAdapterQt::addDp(double x, double y)
   // save it
   _dpPoints.push_back(t);
 
+  drawElements(true);
+
 }
 
 //////////////////////////////////////////////////////////////////////
 void
-SkewTAdapterQt::drawElements()
+SkewTAdapterQt::drawElements(bool selective)
 {
 
   // redraw all of the graphic elements.
@@ -233,7 +228,28 @@ SkewTAdapterQt::drawElements()
   int h = height();
   int w = width();
 
-  QPainter painter(this);
+  if (_pixmap->height()!=h || _pixmap->width()!=w) {
+      delete _pixmap;
+      _pixmap = new QPixmap(w,h);     
+      _pixmap->fill();
+      _pLines._next     = 0;
+      _tdryPoints._next = 0;
+      _dpPoints._next   = 0;
+      _texts._next      = 0;
+      _symbols._next    = 0;
+
+  }
+
+  // Reset the start of rendering so that the entire dataset is redrawn.
+  if (!selective) {
+      _pLines._next     = 0;
+      _tdryPoints._next = 0;
+      _dpPoints._next   = 0;
+      _texts._next      = 0;
+      _symbols._next    = 0;
+  }
+
+  QPainter painter(_pixmap);
 
   _title.draw(painter, w, w);
 
@@ -266,15 +282,15 @@ SkewTAdapterQt::drawElements()
 
   painter.end();
 
+  update();
+
 }
 
 //////////////////////////////////////////////////////////////////////
 void
 SkewTAdapterQt::draw_finished()
 {
-
   _ready = true;
-
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -288,7 +304,7 @@ void
 SkewTAdapterQt::unzoom()
 {
   init();
-  update();
+  drawElements();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -413,17 +429,8 @@ void
 SkewTAdapterQt::resizeTimeout()
 {
   // The resize timer finally timed out, so the resizing must be done.
-  // Enable painting, and trigger a paint event via update().
   _dontPaint = false;
-   
-  // Reset the start of rendering so that the entire dataset is redrawn.
-  _pLines._next     = 0;
-  _tdryPoints._next = 0;
-  _dpPoints._next   = 0;
-  _texts._next      = 0;
-  _symbols._next    = 0;
-
-  update();
+  drawElements(); 
 }
 
 
@@ -432,9 +439,13 @@ void
 SkewTAdapterQt::paintEvent( QPaintEvent *e )
 {
   // if painting is allowed, redraw the whole thing.
-  if (!_dontPaint)
-    if (_ready)
-      drawElements();
+    if (!_dontPaint) {
+      if (_ready) {
+          QPainter p(this);
+          p.drawPixmap(0,0, *_pixmap);
+          p.end();
+      }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -467,12 +478,7 @@ SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
   if( deltaX > 20 &&  deltaY > 20) {
     if (_pSkewT) {
       _pSkewT->zoomin();
-      update();
-    }
-  } else {
-    if (_pSkewT) {
-      _pSkewT->unzoom();
-      update();
+      drawElements();
     }
   }
 }

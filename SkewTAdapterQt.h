@@ -330,14 +330,17 @@ namespace skewt {
 		QColor              getQColor(unsigned int colorCode);
 		/**
 		* draw all of the graphic elements.
+        * @param selective True if only the most recently received objects should be rendered.
+        * This give performance gains for large datasets.
 		*/
-		void                drawElements();
+		void                drawElements(bool selective=false);
 		/**
 		* remove all of the graphic elements.
 		*/
 		void                removeElements();
 
-		QRubberBand*                  _rb;            ///< Rubberband used for zoming
+		QPixmap* _pixmap; ///< All drawing will be endered here, and this will be copied to the widget in paintEvent()
+        QRubberBand*                  _rb;            ///< Rubberband used for zoming
         VectorPlus<SkewTQtText>       _texts;         ///< Text graphic elements
 		VectorPlus<SkewTQtPolyline*>  _pLines;        ///< Polyline graphic elements. (Note that these are pointers, and so must be deleted during destruction).
 		VectorPlus<SkewTQtDatum>      _tdryPoints;    ///< Tdry datum graphic elements
