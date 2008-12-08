@@ -8,13 +8,11 @@ SOURCES += SkewTAdapterQt.cc
 
 DEFINES +=
 
-CONFIG += debug
+CONFIG += build_all
 CONFIG += qt 
 CONFIG += warn_on 
 CONFIG += staticlib
 config += exceptions
-
-DESTDIR = ./Debug
 
 INCLUDEPATH += ../
 INCLUDEPATH += ../.. 

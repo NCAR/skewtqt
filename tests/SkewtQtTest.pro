@@ -7,15 +7,13 @@ SOURCES += SkewtQtTest.cc
 
 DEFINES +=
 
-CONFIG += debug
+CONFIG += build_all
 CONFIG += qt 
 CONFIG += warn_on 
 CONFIG += staticlib
-config += exceptions
+CONFIG += exceptions
 
 INCLUDEPATH += ../
 INCLUDEPATH += ../..
 INCLUDEPATH += ../../../
 INCLUDEPATH += c:/Projects/log4cpp-0.3.4b/include
-
-LIBS += ../Debug/skewtqt.lib
