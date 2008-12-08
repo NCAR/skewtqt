@@ -11,7 +11,8 @@ COPYRIGHT:	University Corporation for Atmospheric Research, 2003-2008
 #ifndef SkewtQtTest_H
 #define SkewtQtTest_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QDialog>
+#include <QtGui/QLabel>
 #include <QtCore/QTimer>
 
 #include "Skewt/Skewt.h"
@@ -22,7 +23,7 @@ class SkewtQtTest : public QObject
   Q_OBJECT
 
 public:
-	SkewtQtTest(QWidget *parent, const char* name);
+	SkewtQtTest(QDialog *parent, const char* name);
   virtual ~SkewtQtTest();
 
 public slots:
@@ -34,9 +35,14 @@ protected:
 
   skewt::SkewTAdapterQt* _skewtAdapter;
   skewt::SkewT* _skewt;
+  QLabel* _pointsLabel;
   QTimer _timer;
   
+  // number of points in the initial profile
   int _n;
+  // the total number of points being displayed.
+  int _N;
+
   double* _pres;
   double* _tdry;
   double* _rh;

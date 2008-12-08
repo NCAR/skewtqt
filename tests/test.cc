@@ -10,8 +10,8 @@ COPYRIGHT:	University Corporation for Atmospheric Research, 2003-2004
 -------------------------------------------------------------------------
 */
 
-#include <q3vbox.h>
-#include <qapplication.h>
+#include <QDialog>
+#include <QApplication>
 #include "SkewtQtTest.h"
 
 int main(int argc, char *argv[])
@@ -19,12 +19,12 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
-  Q3VBox mainWindow;
-  mainWindow.show();
+  QDialog d;
+  d.resize(1000, 1000);
+  d.show();
 
-  SkewtQtTest skewtTest(&mainWindow, "skewtTest");
+  SkewtQtTest skewtTest(&d, "skewtTest");
 
-  app.setMainWidget(&mainWindow);
   app.exec();
 
   return(0);
