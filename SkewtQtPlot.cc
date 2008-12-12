@@ -199,10 +199,52 @@ QPixmap
 SkewtQtPlot::
 getPixmap()
 {
-  return QPixmap::grabWidget(this->skewtWidget());
+  
+  // grab the skewt pixmap, add a title above it,
+  // and return as a pixmap.
+  // The title will be the domain extent
+
+  QFont font = QFont("Arial", 12);
+  QFontMetrics metrics(font);
+
+  // get the skewt pixmap
+  QPixmap skewt = QPixmap::grabWidget(this->skewtWidget());
+
+  // set the number of pixels above and below the title text
+  int titlePad = 5;
+
+  // set the title string
+  QString title = getDomain()->simpleString().c_str();
+
+  // figure how many vertical pixels we need to display the title 
+  int textHeight = metrics.boundingRect(title).height();
+
+  // determine final pixmap dimensions
+  int finalWidth = skewt.width();
+  int titleHeight = textHeight + 2*titlePad;
+  int finalHeight = skewt.height() + titleHeight;
+
+  // allocate the final pixmap
+  QPixmap p(finalWidth, finalHeight);
+
+  // fill it with white
+  p.fill();
+
+  // a painter is used for the drawing operations
+  QPainter painter(&p);
+
+  // render the title string at the top
+  painter.setPen(Qt::black);
+  painter.setFont(font);
+  painter.drawText(QRect(0,0,finalWidth, titlePad+textHeight), 
+	  Qt::AlignCenter | Qt::AlignTop, title);
+
+  // copy the skewt into the bottom of the pixmap
+  painter.drawPixmap(0, titleHeight, skewt, 0, 0, 0, 0);
+
+  // return it
+  return p;
 }
-
-
 
 /* -------------------------------------------------------------------- */
 void
