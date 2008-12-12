@@ -54,6 +54,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 
 	// create our layouts
 	QVBoxLayout* mainLayout	     = new QVBoxLayout;
+	QBoxLayout* titleLayout	     = new QHBoxLayout;
 	_plotLayout	            	 = new QVBoxLayout;
 	QVBoxLayout* statusLayout    = new QVBoxLayout;
 	QHBoxLayout* dataLayout	     = new QHBoxLayout;
@@ -63,18 +64,13 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QBoxLayout* rhLayout	     = new QHBoxLayout;
 	QBoxLayout* wspdLayout	     = new QHBoxLayout;
 	QBoxLayout* wdirLayout	     = new QHBoxLayout;
-	QBoxLayout* timeLayout	     = new QHBoxLayout;
-	QBoxLayout* startLayout	     = new QHBoxLayout;
-	QBoxLayout* stopLayout	     = new QHBoxLayout;
 
     // Set our layout for Plot::QWidget.
     this->setLayout(mainLayout);
 
+	mainLayout->addLayout(titleLayout);
 	mainLayout->addLayout(_plotLayout);
 	mainLayout->addLayout(statusLayout);
-
-	statusLayout->addLayout(dataLayout);
-	statusLayout->addLayout(timeLayout);
 
     dataLayout->addLayout(pointCountLayout);
 	dataLayout->addStretch();
@@ -88,11 +84,8 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	dataLayout->addStretch();
 	dataLayout->addLayout(wdirLayout);
 
-    timeLayout->addStretch();
-	timeLayout->addLayout(startLayout);
-    timeLayout->addStretch();
-	timeLayout->addLayout(stopLayout);
-    timeLayout->addStretch();
+	statusLayout->addLayout(dataLayout);
+
 
 	// create the skew-t artifacts: the skewt itself, and a graphics
 	// adapter for Qt usage.
@@ -123,15 +116,11 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	WdirLabel->setAlignment(Qt::AlignRight);
 	WdirLabel->setSizePolicy(MinMin);
 
-	QLabel* StartLabel = new QLabel( "Start: ", 0);
-	StartLabel->setAlignment(Qt::AlignRight);
-	StartLabel->setSizePolicy(MinMin);
-
-	QLabel* StopLabel = new QLabel( "Stop: ", 0);
-	StopLabel->setAlignment(Qt::AlignRight);
-	StopLabel->setSizePolicy(MinMin);
-
 	// create the status widgets that will be updated in real-time
+	_title = new QLabel( "", 0);
+	_title->setAlignment(Qt::AlignCenter);
+	_title->setSizePolicy(MinMin);
+
 	_pointCount = new QLabel( "", 0);
 	_pointCount->setAlignment(Qt::AlignLeft);
 	_pointCount->setSizePolicy(MinMin);
@@ -156,13 +145,9 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	_wdir->setAlignment(Qt::AlignLeft);
 	_wdir->setSizePolicy(MinMin);
 
-	_startTime = new QLabel( "", 0);
-	_startTime->setAlignment(Qt::AlignLeft);
-	_startTime->setSizePolicy(MinMin);
-
-	_stopTime = new QLabel( "", 0);
-	_stopTime->setAlignment(Qt::AlignLeft);
-	_stopTime->setSizePolicy(MinMin);
+	titleLayout->addStretch();
+	titleLayout->addWidget(_title);
+	titleLayout->addStretch();
 
 	pointCountLayout->addWidget(pointLabel);
 	pointCountLayout->addWidget(_pointCount);
@@ -181,12 +166,6 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 
 	wdirLayout->addWidget(WdirLabel);
 	wdirLayout->addWidget(_wdir);
-
-	startLayout->addWidget(StartLabel);
-	startLayout->addWidget(_startTime);
-
-	stopLayout->addWidget(StopLabel);
-	stopLayout->addWidget(_stopTime);
 
 	// Initialize the dataset selection prototype and try to fill
 	// it with defaults.
@@ -381,8 +360,7 @@ replot(datastore::DataNotice dn)
 			_pSkewT->drawWind(pres[k], wspd[k], wdir[k]);
 		}
 
-		_startTime->setText(times[0].simpleString().c_str());
-		_stopTime->setText (times[nData-1].simpleString().c_str());
+  		_title->setText(getDomain()->simpleString().c_str());
 
 		_pointCount->setNum(nData);
 

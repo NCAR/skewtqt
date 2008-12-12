@@ -215,8 +215,7 @@ namespace plotlib
 		QLabel*          _RH;               ///< Realtime values of rh will be displayed here.
 		QLabel*          _wspd;             ///< Realtime values of wind speed will be displayed here.
 		QLabel*          _wdir;             ///< Realtime values of wind direction will be displayed here.
-		QLabel*          _startTime;        ///< Data start time will be displayed here.
-		QLabel*          _stopTime;         ///< Data start time will be displayed here.
+		QLabel*          _title;            ///< Title will be displayed here.
 
 		datastore::DateTime _lastDataTime;  ///< The time of the most recent data on the plot
 		
