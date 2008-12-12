@@ -165,9 +165,6 @@ SkewTAdapterQt::Text(const std::string &s, const double x, const double y, unsig
   // save it
   _texts.push_back(t);
 
-  // int h = height();
-  // int w = width();
-
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -284,6 +281,7 @@ SkewTAdapterQt::drawElements(bool selective)
 
   painter.end();
 
+  // trigger a repaint event.
   update();
 
 }
