@@ -420,7 +420,10 @@ replot(datastore::DataNotice dn)
 /* -------------------------------------------------------------------- */
 void 
 SkewtQtPlot::print(QPrinter *printer) {
-	_pSkewTAdapter->print(printer);
+   // set the title string
+	std::string title = getDomain()->simpleString().c_str();
+
+	_pSkewTAdapter->print(printer, title);
 }
 
 /* -------------------------------------------------------------------- */

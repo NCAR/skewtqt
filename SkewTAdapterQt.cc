@@ -288,6 +288,46 @@ SkewTAdapterQt::drawElements(bool selective)
 
 //////////////////////////////////////////////////////////////////////
 void
+SkewTAdapterQt::drawElements(QPrinter* printer)
+{
+
+  QRect rect = printer->pageRect();
+	
+  int h = rect.height();
+  int w = rect.width();
+
+  QPainter painter(printer);
+
+  _title.draw(painter, w, h);
+
+  _subTitle.draw(painter, w, h);
+
+  for (unsigned int i = 0; i < _pLines.size(); i++) {
+    _pLines[i]->draw(painter,w, h);
+  }
+
+  for (unsigned int j = 0; j < _tdryPoints.size(); j++) {
+    _tdryPoints[j].draw(painter, w, h);
+  }
+
+  for (unsigned int d = 0; d < _dpPoints.size(); d++) {
+    _dpPoints[d].draw(painter, w, h);
+  }
+
+  for (unsigned int t = 0; t < _texts.size(); t++) {
+    _texts[t].draw(painter, w, h);
+  }
+
+  for (unsigned int s = 0; s < _symbols.size(); s++) {
+    _symbols[s].draw(painter, w, h);
+  }
+
+  painter.end();
+
+  update();
+}
+//////////////////////////////////////////////////////////////////////
+void
 SkewTAdapterQt::draw_finished()
 {
   _ready = true;
@@ -516,60 +556,23 @@ SkewTAdapterQt::removeElements()
 
 //////////////////////////////////////////////////////////////////////
 void
-SkewTAdapterQt::print() {
+SkewTAdapterQt::print(QPrinter* printer, std::string titleOverride) {
 
-	QPrinter printer;
-	print(&printer);
-}
+	bool doTitle = false;
 
-//////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::print(QPrinter* printer) {
-	QPixmap pixmap(width(), height());
-	pixmap = QPixmap::grabWidget(this);
-
-	if (pixmap.isNull()) {
-		return;
+	// if current title is empty, use the override
+	if (_title.size() == 0 && titleOverride.size() != 0) {
+		doTitle = true;
+		this->title(titleOverride);
 	}
 
-    double ScreenToPrinterX = (double)printer->logicalDpiX() /
-                                (double)logicalDpiX();
-    double ScreenToPrinterY = (double)printer->logicalDpiY() /
-                                (double)logicalDpiY();
+	// render the skewt elements to the printer device.
+	drawElements(printer);
 
-    // Printer image dimensions
-    double pvw = ScreenToPrinterX * pixmap.width();
-    double pvh = ScreenToPrinterY * pixmap.height();
-
-    // Printer Page Size
-    double wPage = (double)printer->width();
-    double hPage = (double)printer->height();
-
-    // Scale to fit the page
-    if ( pvw > wPage )
-    {
-      qWarning( "Scaling width to fit" );
-      double scale = wPage / pvw;
-      pvw = wPage;
-      pvh *= scale;
-    }
-    if ( pvh > hPage )
-    {
-      qWarning( "Scaling height to fit" );
-      double scale = hPage / pvh;
-      pvh = hPage;
-      pvw *= scale;
-    }
-
-    // Center on the page
-    double pvx = ( wPage - pvw ) / 2.0;
-    double pvy = ( hPage - pvh ) / 2.0;
-
-    QPainter p( printer );
-    p.setWindow( 0, 0, pixmap.width(), pixmap.height() );
-    p.setViewport( (int)floor(pvx), (int)floor(pvy),
-		   (int)floor(pvw), (int)floor(pvh) );
-    p.drawPixmap( 0, 0, pixmap );
+	// reset the title to empty if we had set it previously
+	if (doTitle) {
+		this->title("");
+	}
 
 }
 
@@ -642,6 +645,13 @@ SkewTQtText::SkewTQtText()
 SkewTAdapterQt::
 SkewTQtText::~SkewTQtText()
 {
+}
+
+//////////////////////////////////////////////////////////////////////
+int
+SkewTAdapterQt::
+SkewTQtText::size() {
+	return _text.size();
 }
 
 //////////////////////////////////////////////////////////////////////

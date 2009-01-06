@@ -11,6 +11,7 @@
 
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
+#include <QtGui/QPrinter>
 #include <QtGui/QPen>
 #include <QtGui/QWidget>
 
@@ -118,9 +119,13 @@ namespace skewt {
 
 		void markPoints (bool flag);
 
-		void print();
+		void print() {};
 
-		void print(QPrinter* printer);
+		/**
+		* If the current _title is empty, and title is non-empty, tempporarily set
+		* _title=title for the printing.
+		**/
+		void print(QPrinter* printer, std::string title);
 
 		double aspectRatio();
 
@@ -213,6 +218,10 @@ namespace skewt {
 			* Destructor
 			*/
 			virtual ~SkewTQtText();
+			/** 
+			* @return The size of the text
+			**/
+			int size();
 			/**
 			* Draw the text.
 			* @param painter The device to draw on.
@@ -334,7 +343,13 @@ namespace skewt {
         * @param selective True if only the most recently received objects should be rendered.
         * This give performance gains for large datasets.
 		*/
-		void                drawElements(bool selective=false);
+		void                drawElements(bool selective=false);		
+		/**
+		* Draw all of the graphic elements to a printer.
+        * @param printer The printer to draw to.
+		*/
+		void                drawElements(QPrinter* printer);
+
 		/**
 		* remove all of the graphic elements.
 		*/
