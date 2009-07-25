@@ -1,0 +1,16 @@
+Import('env')
+
+libsources = [
+   'SkewTAdapterQt.cc',
+   ]
+lib = env.Library('#/lib/SkewtQt', libsources)
+env.Default(lib)
+
+if env['PLATFORM'] != 'win32':
+	## Generating Doxygen documentation for the AspenWidgetValidator class
+	doxysources = Split("""
+      SkewTAdapterQt.cc
+      SkewTAdapterQt.h
+ 	""")
+	html = env.Apidocs(doxysources, DOXYFILE_FILE = "Doxyfile")
+	env.Default(html)
