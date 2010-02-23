@@ -6,7 +6,7 @@ libsources = [
 lib = env.Library('#/lib/SkewtQt', libsources)
 env.Default(lib)
 
-if env['PLATFORM'] != 'win32':
+if env.has_key('DO_DOXYGEN'):
 	## Generating Doxygen documentation for the AspenWidgetValidator class
 	doxysources = Split("""
       SkewTAdapterQt.cc
