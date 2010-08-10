@@ -24,7 +24,6 @@ class QMouseEvent;
 class QResizeEvent;
 
 namespace skewt {
-
 	/**
 	* This implementation of SkewTAdapter draws the SkewT using a Qt Qwidget.
 	* SkewTAdapterQt is derived from both SkewTAdapter and QWidget.
@@ -95,7 +94,6 @@ namespace skewt {
 	*/
 	class SkewTAdapterQt : public QWidget, public SkewTAdapter
 	{
-
 		Q_OBJECT
 
 	public:
@@ -147,14 +145,15 @@ namespace skewt {
 
 		void init();
 
-		uint getSymbolSize()		{ return _symbolSize; }
-		void setSymbolSize(int s)	{ _symbolSize = s; }
+		uint getSymbolSize()	  { return _symbolSize; }
+		void setSymbolSize(int s) { _symbolSize = s; }
 
 		/**
 		* This function is clever. It tracks the incoming requests,
 		* and consolidates them into a single polyline when  possible.
 		*/
-		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
+		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, 
+		          SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
 
 		void savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType);
 
@@ -230,11 +229,11 @@ namespace skewt {
 			*/
 			void draw(QPainter& painter, int width, int height);
 		protected:
-			std::string   _text;
-			double        _x;
-			double        _y;
-			QPen          _pen;
-			int           _alignFlag;
+			std::string _text;
+			double      _x;
+			double      _y;
+			QPen        _pen;
+			int         _alignFlag;
 		};
 
 		/**
@@ -296,11 +295,11 @@ namespace skewt {
 			*/
 			void draw(QPainter& painter, int width, int height);
 		protected:
-			double  _x;                 ///< The x location
-			double  _y;                 ///< The y location
-			int     _size;              ///< The size of the symbol, in pixels
-			QPen                _pen;   ///< The pen for drawing.
-			QBrush              _brush; ///< the brush for drawing.
+			double _x;          ///< The x location
+			double _y;          ///< The y location
+			int    _size;       ///< The size of the symbol, in pixels
+			QPen   _pen;   		///< The pen for drawing.
+			QBrush _brush; 		///< the brush for drawing.
 		};
 
 		/**
@@ -308,7 +307,7 @@ namespace skewt {
         * will be copied to the widget.
 		* @param e The paint event
 		*/
-		void                paintEvent(QPaintEvent *e);
+		void paintEvent(QPaintEvent *e);
 		/**
 		* Called by Qt when there is a resize event. The dontPaint flag is set true, and
 		* a timer is initiated. When the timer completes, the dontPaint flag is cleared,
@@ -316,7 +315,7 @@ namespace skewt {
         * generate a paint event.
 		*@param e Resize event.
 		*/
-		void                resizeEvent(QResizeEvent *e);
+		void resizeEvent(QResizeEvent *e);
 		/**
 		* Called when the user presses the mouse.
 		*/
@@ -337,23 +336,23 @@ namespace skewt {
 		* Return the QColor equivalent of the SkewT color code. See SkewTdefs.h
 		* @return The coresponding QColor.
 		*/
-		QColor              getQColor(unsigned int colorCode);
+		QColor getQColor(unsigned int colorCode);
 		/**
 		* draw all of the graphic elements.
         * @param selective True if only the most recently received objects should be rendered.
         * This give performance gains for large datasets.
 		*/
-		void                drawElements(bool selective=false);		
+		void drawElements(bool selective=false);		
 		/**
 		* Draw all of the graphic elements to a printer.
         * @param printer The printer to draw to.
 		*/
-		void                drawElements(QPrinter* printer);
+		void drawElements(QPrinter* printer);
 
 		/**
 		* remove all of the graphic elements.
 		*/
-		void                removeElements();
+		void removeElements();
 
 		QPixmap* _pixmap; ///< All drawing will be endered here, and this will be copied to the widget in paintEvent()
         QRubberBand*                  _rb;            ///< Rubberband used for zoming
