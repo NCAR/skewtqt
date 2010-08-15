@@ -24,6 +24,7 @@ class QMouseEvent;
 class QResizeEvent;
 
 namespace skewt {
+
 	/**
 	* This implementation of SkewTAdapter draws the SkewT using a Qt Qwidget.
 	* SkewTAdapterQt is derived from both SkewTAdapter and QWidget.
@@ -94,6 +95,7 @@ namespace skewt {
 	*/
 	class SkewTAdapterQt : public QWidget, public SkewTAdapter
 	{
+
 		Q_OBJECT
 
 	public:
@@ -115,7 +117,6 @@ namespace skewt {
 
 		void addTdry(double x, double y);
 
-		void markPoints (bool flag);
 
 		void print() {};
 
@@ -145,19 +146,30 @@ namespace skewt {
 
 		void init();
 
-		uint getSymbolSize()	  { return _symbolSize; }
-		void setSymbolSize(int s) { _symbolSize = s; }
+		uint getSymbolSize()		{ return _symbolSize; }
+		void setSymbolSize(int s)	{ _symbolSize = s; }
 
 		/**
 		* This function is clever. It tracks the incoming requests,
 		* and consolidates them into a single polyline when  possible.
 		*/
-		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, 
-		          SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
+		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
 
 		void savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType);
 
 		void setSkewT(SkewT* pSkewT);
+
+	public slots:
+	/**
+	 * Draw symbols at the data points for tdry and dp
+	 * @param flag True if yes, false if no.
+	 */
+	void markPoints (bool flag);
+	/**
+	 * Draw lines between the data points for tdry and dp
+	 * @param flag True if yes, false if no.
+	 */
+	void drawLines(bool flag);
 
 	protected slots:
 		/**
@@ -229,11 +241,11 @@ namespace skewt {
 			*/
 			void draw(QPainter& painter, int width, int height);
 		protected:
-			std::string _text;
-			double      _x;
-			double      _y;
-			QPen        _pen;
-			int         _alignFlag;
+			std::string   _text;
+			double        _x;
+			double        _y;
+			QPen          _pen;
+			int           _alignFlag;
 		};
 
 		/**
@@ -294,12 +306,20 @@ namespace skewt {
 			* @param height The height of the drawing area.
 			*/
 			void draw(QPainter& painter, int width, int height);
+			/**
+			 * @return The x coordinate
+			 */
+			double x();
+			/**
+			 * @return The y coordinate
+			 */
+			double y();
 		protected:
-			double _x;          ///< The x location
-			double _y;          ///< The y location
-			int    _size;       ///< The size of the symbol, in pixels
-			QPen   _pen;   		///< The pen for drawing.
-			QBrush _brush; 		///< the brush for drawing.
+			double  _x;                 ///< The x location
+			double  _y;                 ///< The y location
+			int     _size;              ///< The size of the symbol, in pixels
+			QPen    _pen;               ///< The pen for drawing.
+			QBrush  _brush;             ///< the brush for drawing.
 		};
 
 		/**
@@ -307,7 +327,7 @@ namespace skewt {
         * will be copied to the widget.
 		* @param e The paint event
 		*/
-		void paintEvent(QPaintEvent *e);
+		void                paintEvent(QPaintEvent *e);
 		/**
 		* Called by Qt when there is a resize event. The dontPaint flag is set true, and
 		* a timer is initiated. When the timer completes, the dontPaint flag is cleared,
@@ -315,7 +335,7 @@ namespace skewt {
         * generate a paint event.
 		*@param e Resize event.
 		*/
-		void resizeEvent(QResizeEvent *e);
+		void                resizeEvent(QResizeEvent *e);
 		/**
 		* Called when the user presses the mouse.
 		*/
@@ -336,25 +356,36 @@ namespace skewt {
 		* Return the QColor equivalent of the SkewT color code. See SkewTdefs.h
 		* @return The coresponding QColor.
 		*/
-		QColor getQColor(unsigned int colorCode);
+		QColor              getQColor(unsigned int colorCode);
 		/**
 		* draw all of the graphic elements.
         * @param selective True if only the most recently received objects should be rendered.
-        * This give performance gains for large datasets.
+        * This give performance gains when incrementally adding points for large datasets.
 		*/
-		void drawElements(bool selective=false);		
+		void                drawElements(bool selective=false);		
 		/**
 		* Draw all of the graphic elements to a printer.
         * @param printer The printer to draw to.
 		*/
-		void drawElements(QPrinter* printer);
-
+		void                drawElements(QPrinter* printer);
+		/**
+		 * Draw a line segment.
+		* @param painter The device to draw on.
+		* @param pen The drawing pen
+		* @param x1 The virtual x location of the begin point
+		* @param y1 The virtual y location of the begin point
+		* @param x2 The virtual x location of the end point
+		* @param y2 The virtual y location of the end point
+		* @param width The width of the drawing area.
+		* @param height The height of the drawing area.
+		*/
+		void drawLine(QPainter& painter, QPen pen, double x1, double y1, double x2, double y2, int width, int height);
 		/**
 		* remove all of the graphic elements.
 		*/
-		void removeElements();
+		void                removeElements();
 
-		QPixmap* _pixmap; ///< All drawing will be endered here, and this will be copied to the widget in paintEvent()
+		QPixmap* _pixmap; ///< All drawing will be rendered here, and this will be copied to the widget in paintEvent()
         QRubberBand*                  _rb;            ///< Rubberband used for zoming
         VectorPlus<SkewTQtText>       _texts;         ///< Text graphic elements
 		VectorPlus<SkewTQtPolyline*>  _pLines;        ///< Polyline graphic elements. (Note that these are pointers, and so must be deleted during destruction).
@@ -389,6 +420,9 @@ namespace skewt {
 		SkewT*              _pSkewT;                  ///< Set to the SkewT that we are controlling, if zooming is desired. Null otherwise.
 
 		bool                _ready;                   ///< Set true after SkewT calls draw_finished().
+
+		bool                _doPoints;                ///< True if symbols are to be drawn for tdry and dp
+		bool                _doLines;                 ///< True if lines are to be drawn between tdry and dp
 	};
 }
 
