@@ -521,41 +521,41 @@ SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFileTyp
 		_pLines._next = _pLines.size();
 	}
 
-	  if (_doPoints) {
-		  for (unsigned int j = _tdryPoints._next; j < _tdryPoints.size(); j++) {
-	           _tdryPoints[j].draw(painter, xPixels, yPixels);
-		  }
+	if (_doPoints) {
+		for (unsigned int j = _tdryPoints._next; j < _tdryPoints.size(); j++) {
+			_tdryPoints[j].draw(painter, xPixels, yPixels);
+		}
 
-		  for (unsigned int d = _dpPoints._next; d < _dpPoints.size(); d++) {
+		for (unsigned int d = _dpPoints._next; d < _dpPoints.size(); d++) {
 			_dpPoints[d].draw(painter, xPixels, yPixels);
-		  }
-	  }
+		}
+	}
 
-	  if (_doLines) {
-		  for (unsigned int j = _tdryPoints._next+1; j < _tdryPoints.size(); j++) {
+	if (_doLines) {
+		for (unsigned int j = _tdryPoints._next+1; j < _tdryPoints.size(); j++) {
 			drawLine(painter,
-					_redPen,
-					_tdryPoints[j-1].x(),
-					_tdryPoints[j-1].y(),
-					_tdryPoints[j  ].x(),
-					_tdryPoints[j  ].y(),
-					xPixels,
-					yPixels);
-		  }
-		  for (unsigned int d = _dpPoints._next+1; d < _dpPoints.size(); d++) {
+					 _redPen,
+					 _tdryPoints[j-1].x(),
+					 _tdryPoints[j-1].y(),
+					 _tdryPoints[j  ].x(),
+					 _tdryPoints[j  ].y(),
+					 xPixels,
+					 yPixels);
+		}
+		for (unsigned int d = _dpPoints._next+1; d < _dpPoints.size(); d++) {
 			drawLine(painter,
-					_bluePen,
-					_dpPoints[d-1].x(),
-					_dpPoints[d-1].y(),
-					_dpPoints[d  ].x(),
-					_dpPoints[d  ].y(),
-					xPixels,
-					yPixels);
-		  }
-	  }
+					 _bluePen,
+					 _dpPoints[d-1].x(),
+					 _dpPoints[d-1].y(),
+					 _dpPoints[d  ].x(),
+					 _dpPoints[d  ].y(),
+					 xPixels,
+					 yPixels);
+		}
+	}
 
-	  _tdryPoints._next = _tdryPoints.size();
-	  _dpPoints._next = _dpPoints.size();
+	_tdryPoints._next = _tdryPoints.size();
+	_dpPoints._next = _dpPoints.size();
 
 	for (unsigned int t = _texts._next; t < _texts.size(); t++) {
 		_texts[t].draw(painter, xPixels, yPixels);
