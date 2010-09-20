@@ -67,10 +67,6 @@ namespace plotlib
 	* the three SkewT add data functions are called to plot a temperature, dewpoint
 	* and wind barb.
 	* 
-	* @todo Allow alternative moisture variables in place of RH, such as dew point, 
-	* spcific humidity or mixing ratio. At the very least, the user should be able
-	* to specify dew point instead of RH.
-	* 
 	* <b>Plot context menu</b>
 	*
 	* A single context menu will popup from a right mouse clicked anywhere
@@ -133,7 +129,7 @@ namespace plotlib
   
     /// this function is called when there is new data to be plotted. It assumes that
     /// the data update is going to deliver 5 traces (variables), and they
-    /// will be in the order: pres, tdry, rh, wspd and wdiir. It also expects that
+    /// will be in the order: pres, tdry, dp, wspd and wdiir. It also expects that
     /// the same number of data points are delivered for each trace.
     ///
     /// If each trace does have the same length, then the timetags are ASSUMED
@@ -147,7 +143,7 @@ namespace plotlib
     void replot(datastore::DataNotice dn);
 
 		/// Make an initial guess at the data sets to use. An attempt is 
-		/// made to fill _presSet, _tdrySet, _RHset, _wspdSet and
+		/// made to fill _presSet, _tdrySet, _DPset, _wspdSet and
 		/// _wdirSet with default DataSet values. If the default
 		/// sets cannot be located, then selectDataSets() is called in order
 		/// to let the user to complete the selection. If the default DataSet s are
@@ -212,7 +208,7 @@ namespace plotlib
         QLabel*          _pointCount;       ///< Realtime values of point count will be displayed here.
 		QLabel*          _pressure;         ///< Realtime values of pressure will be displayed here.
 		QLabel*          _tdry;             ///< Realtime values of temperature will be displayed here.
-		QLabel*          _RH;               ///< Realtime values of rh will be displayed here.
+		QLabel*          _dp;               ///< Realtime values of dp will be displayed here.
 		QLabel*          _wspd;             ///< Realtime values of wind speed will be displayed here.
 		QLabel*          _wdir;             ///< Realtime values of wind direction will be displayed here.
 		QLabel*          _title;            ///< Title will be displayed here.
@@ -220,7 +216,7 @@ namespace plotlib
 		datastore::DateTime _lastDataTime;  ///< The time of the most recent data on the plot
 		
 		static const uint DefaultSymbolSize;
-		static const std::string P_AXIS, T_AXIS, RH_AXIS, WS_AXIS, WD_AXIS;
+		static const std::string P_AXIS, T_AXIS, DP_AXIS, WS_AXIS, WD_AXIS;
 	};
 
 }	// END NAMESPACE

@@ -25,7 +25,7 @@ const uint SkewtQtPlot::DefaultSymbolSize = 4;
 
 const std::string SkewtQtPlot::P_AXIS = "pressure";
 const std::string SkewtQtPlot::T_AXIS = "temperature";
-const std::string SkewtQtPlot::RH_AXIS = "relative humidity";
+const std::string SkewtQtPlot::DP_AXIS = "dewpoint";
 const std::string SkewtQtPlot::WS_AXIS = "wind speed";
 const std::string SkewtQtPlot::WD_AXIS = "wind direction";
 
@@ -61,7 +61,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	QBoxLayout* pointCountLayout = new QHBoxLayout;
 	QBoxLayout* presLayout	     = new QHBoxLayout;
 	QBoxLayout* tdryLayout	     = new QHBoxLayout;
-	QBoxLayout* rhLayout	     = new QHBoxLayout;
+	QBoxLayout* dpLayout	     = new QHBoxLayout;
 	QBoxLayout* wspdLayout	     = new QHBoxLayout;
 	QBoxLayout* wdirLayout	     = new QHBoxLayout;
 
@@ -78,7 +78,7 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	dataLayout->addStretch();
 	dataLayout->addLayout(tdryLayout);
 	dataLayout->addStretch();
-	dataLayout->addLayout(rhLayout);
+	dataLayout->addLayout(dpLayout);
 	dataLayout->addStretch();
 	dataLayout->addLayout(wspdLayout);
 	dataLayout->addStretch();
@@ -104,9 +104,9 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	tdryLabel->setAlignment(Qt::AlignRight);
 	tdryLabel->setSizePolicy(MinMin);
 
-	QLabel* RHLabel = new QLabel( "RH: ", 0);
-	RHLabel->setAlignment(Qt::AlignRight);
-	RHLabel->setSizePolicy(MinMin);
+	QLabel* dpLabel = new QLabel( "Dewpoint: ", 0);
+	dpLabel->setAlignment(Qt::AlignRight);
+	dpLabel->setSizePolicy(MinMin);
 
 	QLabel* WspdLabel = new QLabel( "Wind Speed: ", 0);
 	WspdLabel->setAlignment(Qt::AlignRight);
@@ -133,9 +133,9 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	_tdry->setAlignment(Qt::AlignLeft);
 	_tdry->setSizePolicy(MinMin);
 
-	_RH = new QLabel( "", 0);
-	_RH->setAlignment(Qt::AlignLeft);
-	_RH->setSizePolicy(MinMin);
+	_dp = new QLabel( "", 0);
+	_dp->setAlignment(Qt::AlignLeft);
+	_dp->setSizePolicy(MinMin);
 
 	_wspd = new QLabel( "", 0);
 	_wspd->setAlignment(Qt::AlignLeft);
@@ -158,8 +158,8 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 	tdryLayout->addWidget(tdryLabel);
 	tdryLayout->addWidget(_tdry);
 
-	rhLayout->addWidget(RHLabel);
-	rhLayout->addWidget(_RH);
+	dpLayout->addWidget(dpLabel);
+	dpLayout->addWidget(_dp);
 
 	wspdLayout->addWidget(WspdLabel);
 	wspdLayout->addWidget(_wspd);
@@ -330,7 +330,7 @@ replot(datastore::DataNotice dn)
   const datastore::DateTime *times;
   const double	*pres;
   const double	*tdry;
-  const double	*RH;
+  const double	*dp;
   const double	*wspd;
   const double	*wdir;
 
@@ -360,7 +360,7 @@ replot(datastore::DataNotice dn)
 		n = ds.getTimeDataPairs(dom, &times, &tdry);
 		break;
 	case 2:
-		n = ds.getTimeDataPairs(dom, &times, &RH);
+		n = ds.getTimeDataPairs(dom, &times, &dp);
 		break;
 	case 3:
 		n = ds.getTimeDataPairs(dom, &times, &wspd);
@@ -398,7 +398,7 @@ replot(datastore::DataNotice dn)
 		// plot data values for times that we haven't seen previously.
 		for (int k = index; k < nData; k++) { 
 			_pSkewT->drawTdry(pres[k], tdry[k]);
-			_pSkewT->drawDp(pres[k], tdry[k], RH[k]);
+			_pSkewT->drawDp(pres[k],   dp[k]);
 			_pSkewT->drawWind(pres[k], wspd[k], wdir[k]);
 		}
 
@@ -409,7 +409,7 @@ replot(datastore::DataNotice dn)
 		// update the status displays with the most recent data
 		_pressure->setText(QString("%1").arg(pres[nData-1], 0, 'f', 1 ));
 		_tdry->setText(QString("%1").arg(tdry[nData-1], 0, 'f', 1 ));
-		_RH->setText(QString("%1").arg(RH[nData-1],	0, 'f', 0 ));
+		_dp->setText(QString("%1").arg(dp[nData-1],	0, 'f', 0 ));
 		_wspd->setText(QString("%1").arg(wspd[nData-1], 0, 'f', 1 ));
 		_wdir->setText(QString("%1").arg(wdir[nData-1], 0, 'f', 0 ));
 
@@ -447,7 +447,7 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 	// the data sets are delivered in the replot!
 	axisList[P_AXIS]  = 0;
 	axisList[T_AXIS]  = 0;
-	axisList[RH_AXIS] = 0;
+	axisList[DP_AXIS] = 0;
 	axisList[WS_AXIS] = 0;
 	axisList[WD_AXIS] = 0;
 
@@ -466,8 +466,8 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 			axisList[P_AXIS] = sets[j];
 		} else if (!name.compare("ATX")) {
 			axisList[T_AXIS] = sets[j];
-		} else if (!name.compare("RHUM")) {
-			axisList[RH_AXIS] = sets[j];
+		} else if (!name.compare("DPXC")) {
+			axisList[DP_AXIS] = sets[j];
 		} else if (!name.compare("WS")) {
 			axisList[WS_AXIS] = sets[j];
 		} else if (!name.compare("WD")) {
@@ -520,8 +520,8 @@ implInsertTrace(const datastore::DataSetSelection& dss) {
 	key += axis[P_AXIS].getVariableName();
 	key += " tdry=";
 	key += axis[T_AXIS].getVariableName();
-	key += " rh=";
-	key += axis[RH_AXIS].getVariableName();
+	key += " dp=";
+	key += axis[DP_AXIS].getVariableName();
 	key += " wspd=";
 	key += axis[WS_AXIS].getVariableName();
 	key += " wdir=";
