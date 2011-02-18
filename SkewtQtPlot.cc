@@ -454,9 +454,6 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 	datastore::DataSetList sets;
 	ds->getDataSets(sets, DataSetFilter(), /*recurse*/true);
 
-	if (sets.size() == 0)
-		return;
-
 	for (size_t j = 0; j < sets.size(); ++j) {
 		std::string name	 = sets[j]->getVariableName().c_str();
 		std::string longName = sets[j]->getLongName().c_str();

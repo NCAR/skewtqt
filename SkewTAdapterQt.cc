@@ -127,7 +127,7 @@ void
 SkewTAdapterQt::Text(const std::string &s, const double x, const double y, unsigned int colorCode)
 {
 
-  if (s.size() == 0)
+  if (s.empty())
     return;
 
   const char* label = s.c_str();
@@ -718,7 +718,7 @@ SkewTAdapterQt::print(QPrinter* printer, std::string titleOverride)
 	bool doTitle = false;
 
 	// if current title is empty, use the override
-	if (_title.size() == 0 && titleOverride.size() != 0) {
+	if (_title.size() == 0 && !titleOverride.empty()) {
 		doTitle = true;
 		this->title(titleOverride);
 	}
