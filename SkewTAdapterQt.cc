@@ -30,7 +30,7 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
   _doLines(false)
 {
   // have a rubberband on hand for zooming
-  _rb = new QRubberBand(QRubberBand::Line, this);
+  _rb = new QRubberBand(QRubberBand::Rectangle, this);
 
   _pixmap = new QPixmap(1,1);
 
@@ -74,7 +74,6 @@ SkewTAdapterQt::~SkewTAdapterQt()
 void
 SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType)
 {
-
   // create polyline elements from the specified line segments. Save the polyline, and draw it.
 
   // The incoming segments are examined. If the color and line type don't change, and the end of
@@ -630,6 +629,8 @@ SkewTAdapterQt::resizeTimeout()
   // The resize timer finally timed out, so the resizing must be done.
   _dontPaint = false;
   QApplication::setOverrideCursor(Qt::WaitCursor);
+  if (_pSkewT)
+    _pSkewT->resize();
   drawElements(); 
   QApplication::restoreOverrideCursor();
 }
