@@ -17,7 +17,6 @@ using namespace skewt;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOffMs):
   QWidget(parent),
   _firstLineCall(true),
@@ -57,7 +56,6 @@ SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOf
 
   // enable the display of QWidget.
   this->show();
-
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -117,15 +115,12 @@ SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int co
   }
   _lastX2 = x2;
   _lastY2 = y2;
-
-
 }
 
 //////////////////////////////////////////////////////////////////////
 void
 SkewTAdapterQt::Text(const std::string &s, const double x, const double y, unsigned int colorCode)
 {
-
   if (s.empty())
     return;
 
@@ -166,12 +161,10 @@ SkewTAdapterQt::Text(const std::string &s, const double x, const double y, unsig
 
   // save it
   _texts.push_back(t);
-
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::init()
+void SkewTAdapterQt::init()
 {
   for (unsigned int i = 0; i < _pLines.size(); i++)
     delete _pLines[i];
@@ -186,8 +179,7 @@ SkewTAdapterQt::init()
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::setSkewT(SkewT* pSkewT)
+void SkewTAdapterQt::setSkewT(SkewT* pSkewT)
 {
   _pSkewT = pSkewT;
 }
@@ -223,7 +215,6 @@ void SkewTAdapterQt::addDp(double x, double y)
 void
 SkewTAdapterQt::drawElements(bool selective)
 {
-
   // redraw all of the graphic elements.
 
   int h = height();
@@ -238,7 +229,6 @@ SkewTAdapterQt::drawElements(bool selective)
       _dpPoints._next   = 0;
       _texts._next      = 0;
       _symbols._next    = 0;
-
   }
 
   QPainter painter(_pixmap);
@@ -302,14 +292,11 @@ SkewTAdapterQt::drawElements(bool selective)
 
   // trigger a repaint event.
   update();
-
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::drawElements(QPrinter* printer)
+void SkewTAdapterQt::drawElements(QPrinter* printer)
 {
-
   QRect rect = printer->pageRect();
 	
   int h = rect.height();
@@ -378,7 +365,6 @@ SkewTAdapterQt::drawElements(QPrinter* printer)
 void SkewTAdapterQt::drawLine(QPainter& painter, QPen pen,
 		double x1, double y1, double x2, double y2, int width, int height)
 {
-
   QPolygon points(2);
 
   int xx1 = (int)(width * x1);
@@ -397,21 +383,18 @@ void SkewTAdapterQt::drawLine(QPainter& painter, QPen pen,
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::draw_finished()
+void SkewTAdapterQt::draw_finished()
 {
   _ready = true;
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::maximize()
+void SkewTAdapterQt::maximize()
 {
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::unzoom()
+void SkewTAdapterQt::unzoom()
 {
   QApplication::setOverrideCursor(Qt::WaitCursor);
   init();
@@ -420,8 +403,7 @@ SkewTAdapterQt::unzoom()
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::extents(double &xmin, double &xmax, double &ymin, double &ymax)
+void SkewTAdapterQt::extents(double &xmin, double &xmax, double &ymin, double &ymax)
 {
   xmin = ((double) _zoomStart.x()/(double)width());
   ymin = ((double) (height()-_zoomStart.y())/(double)height());
@@ -437,39 +419,32 @@ SkewTAdapterQt::extents(double &xmin, double &xmax, double &ymin, double &ymax)
     xmax = xmin;
     xmin = temp;
   }
-
 }
 
-
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::symbol(double x, double y, unsigned int colorCode, SymType st)
+void SkewTAdapterQt::symbol(double x, double y, unsigned int colorCode, SymType st)
 {
   // create the datum
   SkewTQtDatum t(x, y, _symbolSize, _bluePen, _blueBrush);
 
   // save it
   _symbols.push_back(t);
-
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::title(std::string s)
+void SkewTAdapterQt::title(std::string s)
 {
   _title = SkewTQtText(s, 0.50, 0.975, _bluePen, Qt::AlignHCenter);
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::subTitle(std::string s)
+void SkewTAdapterQt::subTitle(std::string s)
 {
   _subTitle = SkewTQtText(s, 0.50, 0.935, _bluePen, Qt::AlignHCenter);
 }
 
 //////////////////////////////////////////////////////////////////////
-double
-SkewTAdapterQt::aspectRatio()
+double SkewTAdapterQt::aspectRatio()
 {
   int h = height();
   int w  = width();
@@ -481,26 +456,21 @@ SkewTAdapterQt::aspectRatio()
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::markPoints(bool flag)
+void SkewTAdapterQt::markPoints(bool flag)
 {
 	_doPoints = flag;
-
 	drawElements(false);
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::drawLines(bool flag)
+void SkewTAdapterQt::drawLines(bool flag)
 {
 	_doLines = flag;
-
     drawElements(false);
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType)
+void SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType)
 {
 	// redraw all of the graphic elements.
 	QPixmap* pixmap = new QPixmap(xPixels, yPixels);
@@ -579,8 +549,7 @@ SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFileTyp
 }
 
 //////////////////////////////////////////////////////////////////////
-QColor
-SkewTAdapterQt::getQColor(unsigned int colorCode)
+QColor SkewTAdapterQt::getQColor(unsigned int colorCode)
 {
   QColor qcolor;
   switch (colorCode) {
@@ -611,8 +580,7 @@ SkewTAdapterQt::getQColor(unsigned int colorCode)
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::resizeEvent( QResizeEvent *e )
+void SkewTAdapterQt::resizeEvent( QResizeEvent *e )
 {
   // set the dontPaint flag, to prohibit repaints until the resizing is finished.
   _dontPaint = true;
@@ -623,8 +591,7 @@ SkewTAdapterQt::resizeEvent( QResizeEvent *e )
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::resizeTimeout()
+void SkewTAdapterQt::resizeTimeout()
 {
   // The resize timer finally timed out, so the resizing must be done.
   _dontPaint = false;
@@ -635,40 +602,35 @@ SkewTAdapterQt::resizeTimeout()
   QApplication::restoreOverrideCursor();
 }
 
-
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::paintEvent( QPaintEvent *e )
+void SkewTAdapterQt::paintEvent( QPaintEvent *e )
 {
-  // if painting is allowed, redraw the whole thing.
-    if (!_dontPaint) {
-      if (_ready) {
-          QPainter p(this);
-          p.drawPixmap(0,0, *_pixmap);
-          p.end();
-      }
+	// if painting is allowed, redraw the whole thing.
+	if (!_dontPaint) {
+    	if (_ready) {
+        	QPainter p(this);
+          	p.drawPixmap(0,0, *_pixmap);
+          	p.end();
+      	}
     }
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::mousePressEvent( QMouseEvent* e)
+void SkewTAdapterQt::mousePressEvent( QMouseEvent* e)
 {
   _zoomStart = _zoomStop = e->pos();
   _rb->setGeometry(QRect(_zoomStart, QSize()));
   _rb->show();
 }
+
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::mouseMoveEvent( QMouseEvent* e )
+void SkewTAdapterQt::mouseMoveEvent( QMouseEvent* e )
 {
   _rb->setGeometry(QRect(_zoomStart, e->pos()).normalized());
 }
 
-
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
+void SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
 {
   _zoomStop = e->pos();
   _rb->hide();
@@ -686,6 +648,7 @@ SkewTAdapterQt::mouseReleaseEvent( QMouseEvent* e )
     }
   }
 }
+
 //////////////////////////////////////////////////////////////////////
 void
 SkewTAdapterQt::drawBoundingRect( QRubberBand* rb, const QPoint& p1, const QPoint& p2 )
@@ -693,14 +656,11 @@ SkewTAdapterQt::drawBoundingRect( QRubberBand* rb, const QPoint& p1, const QPoin
   rb->setGeometry(
     QRect( QPoint( qMin( p1.x(), p2.x() ), qMin( p1.y(), p2.y() ) ),
 	   QPoint( qMax( p1.x(), p2.x() ), qMax( p1.y(), p2.y() ) ) ) );
-
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::removeElements()
+void SkewTAdapterQt::removeElements()
 {
-
   for (unsigned int i = 0; i < _pLines.size(); i++)
     delete _pLines[i];
 
@@ -709,12 +669,10 @@ SkewTAdapterQt::removeElements()
   _dpPoints.clear();
   _symbols.clear();
   _texts.clear();
-
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::print(QPrinter* printer, std::string titleOverride)
+void SkewTAdapterQt::print(QPrinter* printer, std::string titleOverride)
 {
 	bool doTitle = false;
 
@@ -731,35 +689,27 @@ SkewTAdapterQt::print(QPrinter* printer, std::string titleOverride)
 	if (doTitle) {
 		this->title("");
 	}
-
 }
 
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtPolyline::SkewTQtPolyline(std::vector<double> x, std::vector<double> y, QPen pen):
   _x(x),
   _y(y),
   _pen(pen)
 {
-
 }
 
-
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtPolyline::~SkewTQtPolyline()
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::
+void SkewTAdapterQt::
 SkewTQtPolyline::draw(QPainter& painter, int width, int height)
 {
-
   // draw a polyline, using our collected points.
   int nPoints = _x.size();
   QPolygon points = QPolygon(nPoints);
@@ -778,7 +728,6 @@ SkewTQtPolyline::draw(QPainter& painter, int width, int height)
 }
 
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtText::SkewTQtText(std::string text, double x, double y, QPen pen, int alignFlag):
   _text(text),
@@ -789,32 +738,26 @@ SkewTQtText::SkewTQtText(std::string text, double x, double y, QPen pen, int ali
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtText::SkewTQtText()
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtText::~SkewTQtText()
 {
 }
 
 //////////////////////////////////////////////////////////////////////
-int
-SkewTAdapterQt::
+int SkewTAdapterQt::
 SkewTQtText::size() {
 	return _text.size();
 }
 
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::
+void SkewTAdapterQt::
 SkewTQtText::draw(QPainter& painter, int width, int height)
 {
   QString text(_text.c_str());
@@ -824,7 +767,6 @@ SkewTQtText::draw(QPainter& painter, int width, int height)
 
   int x = (int)(width * _x);
   int y = (int)(height - height*_y);
-
 
   // adjust according to the alignment flags
   //  if (_alignFlag & Qt::AlignLeft) This is the default
@@ -845,7 +787,6 @@ SkewTQtText::draw(QPainter& painter, int width, int height)
 }
 
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtDatum::SkewTQtDatum(double x, double y, int size, QPen pen, QBrush brush):
   _x(x),
@@ -856,21 +797,16 @@ SkewTQtDatum::SkewTQtDatum(double x, double y, int size, QPen pen, QBrush brush)
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////
-
 SkewTAdapterQt::
 SkewTQtDatum::~SkewTQtDatum()
 {
 }
 
-
 //////////////////////////////////////////////////////////////////////
-void
-SkewTAdapterQt::
+void SkewTAdapterQt::
 SkewTQtDatum::draw(QPainter& painter, int w, int h)
 {
-
   int x = (int)(w * _x - _size/2);
   int y = (int)(h - h*_y - _size/2);
 
@@ -880,16 +816,14 @@ SkewTQtDatum::draw(QPainter& painter, int w, int h)
 }
 
 //////////////////////////////////////////////////////////////////////
-double
-SkewTAdapterQt::
+double SkewTAdapterQt::
 SkewTQtDatum::x()
 {
 	return _x;
 }
 
 //////////////////////////////////////////////////////////////////////
-double
-SkewTAdapterQt::
+double SkewTAdapterQt::
 SkewTQtDatum::y()
 {
 	return _y;
