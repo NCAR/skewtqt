@@ -465,9 +465,9 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 			axisList[T_AXIS] = sets[j];
 		} else if (!name.compare("DPXC")) {
 			axisList[DP_AXIS] = sets[j];
-		} else if (!name.compare("WS")) {
+		} else if (!name.compare("WSC")) {
 			axisList[WS_AXIS] = sets[j];
-		} else if (!name.compare("WD")) {
+		} else if (!name.compare("WDC")) {
 			axisList[WD_AXIS] = sets[j];
 		}
 	}
