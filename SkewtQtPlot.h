@@ -164,12 +164,6 @@ namespace plotlib
 		///
 		void unzoomSlot();
 
-		/// Create a DataSetSelectionDialog, initialized with the existing known
-		/// DataSet values. A signal from the DataSetSelectionDialog is connected to
-		/// changeDataSets(std::vector<const datastore::DataSet*>& dsv), so that this
-		/// function will be called when/if the user has finished the selection.
-		void selectDataSets();
-
 		/// Replace the existing skewt DataSet s with a new selection of them.
 		/// The skewt plot is reinitialized, and the new DataSet s are drawn, but using 
 		/// the existing time domain.
@@ -198,7 +192,7 @@ namespace plotlib
 		/// popupPlotContextMenu is called.
 		bool eventFilter(QObject *object, QEvent *e);
 
-		skewt::SkewTAdapterQt*  _pSkewTAdapter;	///< The adapter for translating between SkewT and Qwt
+		skewt::SkewTAdapterQt*  _pSkewTAdapter;	///< The adapter for translating between SkewT and Qt
 		skewt::SkewT*           _pSkewT;		    ///< The generic skewt plotting object
 
 		/// The prototype DataSetSelection for a skew-t trace

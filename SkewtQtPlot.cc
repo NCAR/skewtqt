@@ -455,7 +455,7 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 	ds->getDataSets(sets, DataSetFilter(), /*recurse*/true);
 
 	for (size_t j = 0; j < sets.size(); ++j) {
-		std::string name	 = sets[j]->getVariableName().c_str();
+		std::string name     = sets[j]->getVariableName().c_str();
 		std::string longName = sets[j]->getLongName().c_str();
 		std::string units    = sets[j]->getUnits().c_str();
 
@@ -480,26 +480,6 @@ SkewtQtPlot::
 createSelection(const std::string& kind)
 {
 	return _prototypeSelection->clone();
-}
-
-
-/* -------------------------------------------------------------------- */
-void
-SkewtQtPlot::selectDataSets() {
-
-	// Always limit traces to one, for now.
-	traces_t dlist = getTraces();
-	if (dlist.size() == 1)
-	{
-		dlist[0]->_action = SA_REPLACE;
-		popupDataSetSelectionDialog(*(dlist[0]));
-	}
-	else
-	{
-		boost::scoped_ptr<DataSetSelection> dss(createSelection());
-		dss->_action = SA_INSERT;
-		popupDataSetSelectionDialog(*dss);
-	}
 }
 
 
