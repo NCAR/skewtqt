@@ -456,8 +456,6 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 
 	for (size_t j = 0; j < sets.size(); ++j) {
 		std::string name     = sets[j]->getVariableName().c_str();
-		std::string longName = sets[j]->getLongName().c_str();
-		std::string units    = sets[j]->getUnits().c_str();
 
 		if (!name.compare("PSX")) {
 			axisList[P_AXIS] = sets[j];
