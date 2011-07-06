@@ -38,7 +38,7 @@ _doLines(false)
 	palette.setColor(backgroundRole(), QColor("white"));
 	setPalette(palette);
 
-	// configure  pens and brushes.
+	// configure pens and brushes.
 	_bluePen.setColor(getQColor(SKEWT_BLUE));
 	_blueBrush.setColor(getQColor(SKEWT_BLUE));
 	_blueBrush.setStyle(Qt::SolidPattern);
@@ -391,10 +391,12 @@ void SkewTAdapterQt::maximize()
 //////////////////////////////////////////////////////////////////////
 void SkewTAdapterQt::unzoom()
 {
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	init();
-	drawElements();
-	QApplication::restoreOverrideCursor();
+	if (_pSkewT) {
+		QApplication::setOverrideCursor(Qt::WaitCursor);
+		_pSkewT->unzoom();
+		drawElements();
+		QApplication::restoreOverrideCursor();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
