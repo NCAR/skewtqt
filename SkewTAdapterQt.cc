@@ -227,7 +227,7 @@ SkewTAdapterQt::drawElements(bool selective)
 
 	QPainter painter(_pixmap);
 
-	_title.draw(painter, w, w);
+	_title.draw(painter, w, h);
 
 	_subTitle.draw(painter, w, h);
 
@@ -431,13 +431,13 @@ void SkewTAdapterQt::symbol(double x, double y, unsigned int colorCode, SymType 
 //////////////////////////////////////////////////////////////////////
 void SkewTAdapterQt::title(std::string s)
 {
-	_title = SkewTQtText(s, 0.50, 0.975, _bluePen, Qt::AlignHCenter);
+	_title = SkewTQtText(s, 0.50, 0.960, _bluePen, Qt::AlignHCenter);
 }
 
 //////////////////////////////////////////////////////////////////////
 void SkewTAdapterQt::subTitle(std::string s)
 {
-	_subTitle = SkewTQtText(s, 0.50, 0.935, _bluePen, Qt::AlignHCenter);
+	_subTitle = SkewTQtText(s, 0.50, 0.930, _bluePen, Qt::AlignHCenter);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -449,7 +449,7 @@ double SkewTAdapterQt::aspectRatio()
 	if (w == 0)
 		return 0.0;
 
-	return ((double)h)/((double) w);
+	return ((double) h)/((double) w);
 }
 
 //////////////////////////////////////////////////////////////////////
