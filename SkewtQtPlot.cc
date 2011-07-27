@@ -454,22 +454,11 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds) {
 	datastore::DataSetList sets;
 	ds->getDataSets(sets, DataSetFilter(), /*recurse*/true);
 
-	for (size_t j = 0; j < sets.size(); ++j) {
-		std::string name     = sets[j]->getVariableName().c_str();
-
-		if (!name.compare("PSX")) {
-			axisList[P_AXIS] = sets[j];
-		} else if (!name.compare("ATX")) {
-			axisList[T_AXIS] = sets[j];
-		} else if (!name.compare("DPXC")) {
-			axisList[DP_AXIS] = sets[j];
-		} else if (!name.compare("WSC")) {
-			axisList[WS_AXIS] = sets[j];
-		} else if (!name.compare("WDC")) {
-			axisList[WD_AXIS] = sets[j];
-		}
-	}
-
+        axisList[P_AXIS] = FindVariable(sets, "PSXC");
+        axisList[T_AXIS] = FindVariable(sets, "ATX");
+        axisList[DP_AXIS] = FindVariable(sets, "DPXC");
+        axisList[WS_AXIS] = FindVariable(sets, "WSC");
+        axisList[WD_AXIS] = FindVariable(sets, "WDC");
 }
 
 
