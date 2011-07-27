@@ -455,7 +455,11 @@ SkewtQtPlot::initDataSets(const datastore::DataSource *ds)
   datastore::DataSetList sets;
   ds->getDataSets(sets, DataSetFilter(), /*recurse*/true);
 
-  axisList[P_AXIS] = FindVariable(sets, "PSXC");
+  DataSet *set;
+
+  if ((set = FindVariable(sets, "PSXC")) == 0)
+    set = FindVariable(sets, "PSFDC");
+  axisList[P_AXIS] = set;
   axisList[T_AXIS] = FindVariable(sets, "ATX");
   axisList[DP_AXIS] = FindVariable(sets, "DPXC");
   axisList[WS_AXIS] = FindVariable(sets, "WSC");
