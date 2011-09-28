@@ -111,7 +111,7 @@ namespace skewt {
 		/**
 		* Destructor
 		*/
-		~SkewTAdapterQt();
+		virtual ~SkewTAdapterQt();
 
 		void addDp(double x, double y);
 
