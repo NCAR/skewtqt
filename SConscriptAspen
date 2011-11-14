@@ -1,4 +1,6 @@
-Import('env')
+import eol_scons
+tools = ['doxygen', 'qt4']
+env = Environment(tools = ['default'] + tools)
 
 libsources = [
    'SkewTAdapterQt.cc',
