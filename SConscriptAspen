@@ -2,6 +2,9 @@ import eol_scons
 tools = ['doxygen', 'qt4']
 env = Environment(tools = ['default'] + tools)
 
+qt4Modules = Split('QtCore QtGui')
+env.EnableQt4Modules(qt4Modules)
+
 libsources = [
    'SkewTAdapterQt.cc',
    ]
