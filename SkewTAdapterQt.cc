@@ -17,7 +17,11 @@ using namespace skewt;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-SkewTAdapterQt::SkewTAdapterQt(QWidget* parent, int symbolSize, int resizeHoldOffMs):
+SkewTAdapterQt::SkewTAdapterQt(QWidget* parent,
+		                       int h,
+		                       int w,
+		                       int symbolSize,
+		                       int resizeHoldOffMs):
 QWidget(parent),
 _firstLineCall(true),
 _symbolSize(symbolSize),
@@ -26,8 +30,16 @@ _resizeHoldOffMs(resizeHoldOffMs),
 _pSkewT(0),
 _ready(false),
 _doPoints(true),
-_doLines(false)
+_doLines(false),
+_height(h),
+_width(w)
 {
+	// determine if drawing area is given
+	if (h == -1 && w == -1)
+		_givenRatio = false;
+	else
+		_givenRatio = true;
+
 	// have a rubberband on hand for zooming
 	_rb = new QRubberBand(QRubberBand::Rectangle, this);
 
@@ -214,9 +226,9 @@ SkewTAdapterQt::drawElements(bool selective)
 	int h = height();
 	int w = width();
 
-	if (_pixmap->height()!=h || _pixmap->width()!=w || !selective) {
+	if (_pixmap->height()!= h || _pixmap->width()!= w || !selective) {
 		delete _pixmap;
-		_pixmap = new QPixmap(w,h);     
+		_pixmap = new QPixmap(w, h);
 		_pixmap->fill();
 		_pLines._next     = 0;
 		_tdryPoints._next = 0;
@@ -443,13 +455,17 @@ void SkewTAdapterQt::subTitle(std::string s)
 //////////////////////////////////////////////////////////////////////
 double SkewTAdapterQt::aspectRatio()
 {
-	int h = height();
-	int w  = width();
+	// if dimension of drawing area is given, so is the aspect ratio.
+	// Otherwise, use the dimension of the drawing frame on Aspen SkewtView
+	if (!_givenRatio) {
+		_height = height();
+		_width  = width();
+	}
 
-	if (w == 0)
+	if (_width == 0)
 		return 0.0;
 
-	return ((double) h)/((double) w);
+	return ((double) _height)/((double) _width);
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -103,10 +103,16 @@ namespace skewt {
 		/**
 		* Construct the adapter.
 		* @param parent The parent for the QWidget.
+		* @param h The height of drawing area. if -1, use the height of _skewtFrame on the Aspen SkewtView
+        * @param w The width of drawing area, if -1, use the width of _skewtFrame on the Aspen SkewtView
 		* @param symbolSize The size, in pixels, that symbols will be drawn at.
 		* @param resizeHoldOffMs The delay time, after a resize event, before a paint event can be performed.
 		*/
-		SkewTAdapterQt(QWidget* parent, int symbolSize = 5, int resizeHoldOffMs = 500);
+		SkewTAdapterQt(QWidget* parent,
+				       int h = -1,
+				       int w = -1,
+				       int symbolSize = 5,
+				       int resizeHoldOffMs = 500);
 
 		/**
 		* Destructor
@@ -160,16 +166,16 @@ namespace skewt {
 		void setSkewT(SkewT* pSkewT);
 
 	public slots:
-	/**
-	 * Draw symbols at the data points for tdry and dp
-	 * @param flag True if yes, false if no.
-	 */
-	void markPoints (bool flag);
-	/**
-	 * Draw lines between the data points for tdry and dp
-	 * @param flag True if yes, false if no.
-	 */
-	void drawLines(bool flag);
+		/**
+		 * Draw symbols at the data points for tdry and dp
+		 * @param flag True if yes, false if no.
+		*/
+		void markPoints (bool flag);
+		/**
+		 * Draw lines between the data points for tdry and dp
+		 * @param flag True if yes, false if no.
+		*/
+		void drawLines(bool flag);
 
 	protected slots:
 		/**
@@ -423,6 +429,17 @@ namespace skewt {
 
 		bool                _doPoints;                ///< True if symbols are to be drawn for tdry and dp
 		bool                _doLines;                 ///< True if lines are to be drawn between tdry and dp
+
+		/// The dimension of the adapter (i.e. drawing area).  For drawing on computer
+		/// screen, it will be the dimension of the drawing frame on the Aspen SkewtView.
+		/// For drawing on a pixmap, it will be the given dimension of the pixmap.
+        int 				_height; 				  ///< Adapter (drawing area) height
+        int 				_width; 				  ///< Adapter (drawing area) width
+        /// When saving the skewt plot, the skewt is drawn on a given drawing area (the
+        /// _height and _width are given), so its aspect ratio is given. But when drawing
+        /// on computer (on Aspen SkewtView), the aspect ratio of the drawing area has to
+        /// be determined at the time of drawing (therefore it is not given)
+        bool                _givenRatio;			  ///< Ture if aspect ratio of drawing area is given.
 	};
 }
 
