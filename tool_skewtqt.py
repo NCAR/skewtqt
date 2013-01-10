@@ -21,6 +21,7 @@ def skewtqt(env):
 Export(libraryName)
 
 # Build library
+env.EnableQt4Modules(qt4Modules)
 
 sources = Split("""
    SkewTAdapterQt.cc
