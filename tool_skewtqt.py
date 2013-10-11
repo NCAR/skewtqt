@@ -1,4 +1,4 @@
-import eol_scons
+
 
 libraryName = 'skewtqt'
 
