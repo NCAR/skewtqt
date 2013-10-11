@@ -1,27 +1,21 @@
-
-
-libraryName = 'skewtqt'
-
-tools = ['doxygen','qt4','prefixoptions',]
-env = Environment(tools = ['default'] + tools)
+toolname = 'skewtqt'
 
 thisDir = Dir('.').abspath
-
-qt4Modules = Split('QtCore QtGui')
+upDir   = Dir('./../').abspath
 
 # Define tool
 def skewtqt(env):
-	env.AppendUnique(LIBS = libraryName)
-	env.AppendUnique(CPPPATH = thisDir)
-	env.AppendUnique(LIBPATH = thisDir)
-	env.AppendDoxref(doxref[0])
-	env.EnableQt4Modules(qt4Modules)
-	env.Require(tools)
-	
-Export(libraryName)
+    env.Append(LIBS = toolname)
+    env.AppendUnique(CPPPATH = upDir)
+    env.AppendUnique(CPPPATH = thisDir)
+    env.AppendUnique(LIBPATH = thisDir)
+    env.Require(['qt4', 'prefixoptions', 'skewt'])
+    env.EnableQt4Modules(['QtCore','QtGui'])
+    
+Export(toolname)
 
-# Build library
-env.EnableQt4Modules(qt4Modules)
+# Build the library
+env = Environment(tools = ['default', 'doxygen', toolname])
 
 sources = Split("""
    SkewTAdapterQt.cc
@@ -31,9 +25,8 @@ headers = Split("""
    SkewTAdapterQt.h
 """)
 
-lib = env.Library(libraryName, sources)
+lib = env.Library(toolname, sources)
 env.Default(lib)
 
 # Create doxygen
-doxref = env.Apidocs(sources + headers, DOXYFILE_DICT={'PROJECT_NAME':libraryName, 'PROJECT_NUMBER':'1.0'})
-
+doxref = env.Apidocs(sources + headers, DOXYFILE_DICT={'PROJECT_NAME':toolname, 'PROJECT_NUMBER':'1.0'})
