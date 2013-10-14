@@ -5,7 +5,7 @@ upDir   = Dir('./../').abspath
 
 # Define tool
 def skewtqt(env):
-    env.Append(LIBS = toolname)
+    env.Append(LIBS = [toolname])
     env.AppendUnique(CPPPATH = upDir)
     env.AppendUnique(CPPPATH = thisDir)
     env.AppendUnique(LIBPATH = thisDir)
