@@ -752,7 +752,10 @@ _alignFlag(alignFlag)
 
 //////////////////////////////////////////////////////////////////////
 SkewTAdapterQt::
-SkewTQtText::SkewTQtText()
+SkewTQtText::SkewTQtText():
+_x(0),
+_y(0),
+_alignFlag(Qt::AlignLeft)
 {
 }
 
@@ -783,14 +786,18 @@ SkewTQtText::draw(QPainter& painter, int width, int height)
 	// adjust according to the alignment flags
 	//  if (_alignFlag & Qt::AlignLeft) This is the default
 	//  if (_alignFlag & Qt::AlignBottom) This is the default
-	if (_alignFlag & Qt::AlignRight)
+	if ((_alignFlag & Qt::AlignRight)) {
 		x -= s.width();
-	if (_alignFlag & Qt::AlignHCenter || _alignFlag & Qt::AlignCenter)
+	}
+	if ((_alignFlag & Qt::AlignHCenter) || (_alignFlag & Qt::AlignCenter)){
 		x -= s.width()/2;
-	if (_alignFlag & Qt::AlignTop)
+	}
+	if ((_alignFlag & Qt::AlignTop)) {
 		y -= s.height();
-	if (_alignFlag & Qt::AlignVCenter || _alignFlag & Qt::AlignCenter)
+	}
+	if ((_alignFlag & Qt::AlignVCenter) || (_alignFlag & Qt::AlignCenter)) {
 		y -= s.height()/2;
+	}
 
 	QRect rect(QPoint(x, y), s);
 
