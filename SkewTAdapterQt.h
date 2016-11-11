@@ -10,10 +10,10 @@
 #endif // _MSC_VER > 1000
 
 #include <QtCore/QTimer>
-#include <QtGui/QPainter>
-#include <QtGui/QPrinter>
-#include <QtGui/QPen>
-#include <QtGui/QWidget>
+#include <QPainter>
+#include <QPrinter>
+#include <QPen>
+#include <QWidget>
 
 #include "SkewT/SkewT.h"
 #include "SkewT/SkewTAdapter.h"

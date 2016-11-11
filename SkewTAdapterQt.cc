@@ -5,11 +5,11 @@
 #include "SkewTAdapterQt.h"
 #include "SkewT/SkewTdefs.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPolygon>
-#include <QtGui/QPrinter>
-#include <QtGui/QRubberBand>
-#include <QtGui/QApplication>
+#include <QMouseEvent>
+#include <QPolygon>
+#include <QPrinter>
+#include <QRubberBand>
+#include <QApplication>
 #include <iostream>
 
 using namespace skewt;

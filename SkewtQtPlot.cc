@@ -6,12 +6,12 @@
 #include "plotlib/DataSetSelectionDialog.h"
 #include "PlotFactoryP.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QLabel>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QInputDialog>
+#include <QMenu>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QMouseEvent>
+#include <QInputDialog>
 #include <QtCore/QEvent>
 
 #include "logx/Logging.h"
