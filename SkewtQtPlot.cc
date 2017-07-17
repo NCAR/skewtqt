@@ -300,9 +300,15 @@ SkewtQtPlot::changeTraceWidth()
 
   bool  ok;
 
+#ifdef SKEWTQT5
+  width = QInputDialog::getInt(this,
+			       "Set symbol size", "Symbol size (pixels):",
+			       width, 0, 100, 1, &ok );
+#else
   width = QInputDialog::getInteger(this,
 		"Set symbol size", "Symbol size (pixels):",
 		width, 0, 100, 1, &ok );
+#endif
 
   if (ok)
   {
