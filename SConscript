@@ -2,6 +2,8 @@
 
 Import('library')
 
+library = library.create()
+
 library.addSources("""
 SkewTAdapterQt.cc
 SkewtQtPlot.cc
@@ -13,3 +15,4 @@ SkewtQtPlot.h
 tests/SkewtQtTest.h
 """)
 
+Return('library')
