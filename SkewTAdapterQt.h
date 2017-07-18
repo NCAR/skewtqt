@@ -16,6 +16,7 @@
 #include <QtGui/QPen>
 #include <QtWidgets/QWidget>
 #else
+#include <QTimer>
 #include <QPainter>
 #include <QPrinter>
 #include <QPen>
