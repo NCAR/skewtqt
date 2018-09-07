@@ -9,7 +9,10 @@ def skewtqt(env):
     env.AppendUnique(CPPPATH = upDir)
     env.AppendUnique(CPPPATH = thisDir)
     env.AppendUnique(LIBPATH = thisDir)
-    env.Require(['qt5', 'prefixoptions', 'skewt'])
+    qt_tool = 'qt4'
+    if env.get('QT_VERSION', 4) != 4:
+        qt_tool = 'qt5'
+    env.Require([qt_tool, 'prefixoptions', 'skewt'])
     env.EnableQtModules(['QtCore','QtGui'])
     
 Export(toolname)
