@@ -16,11 +16,11 @@
 #include <QtGui/QPen>
 #include <QtWidgets/QWidget>
 #else
-#include <QTimer>
-#include <QPainter>
-#include <QPrinter>
-#include <QPen>
-#include <QWidget>
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtGui/QPrinter>
+#include <QtGui/QPen>
+#include <QtGui/QWidget>
 #endif
 
 #include "SkewT/SkewT.h"

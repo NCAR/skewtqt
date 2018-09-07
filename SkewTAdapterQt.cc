@@ -12,11 +12,11 @@
 #include <QtWidgets/QRubberBand>
 #include <QtWidgets/QApplication>
 #else
-#include <QMouseEvent>
-#include <QPolygon>
-#include <QPrinter>
-#include <QRubberBand>
-#include <QApplication>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPolygon>
+#include <QtGui/QPrinter>
+#include <QtGui/QRubberBand>
+#include <QtGui/QApplication>
 #endif
 
 #include <iostream>
