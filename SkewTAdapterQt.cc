@@ -99,13 +99,6 @@ SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int co
 	// one segment matches the beginning of the next segment, the segments are consolidated into
 	// a single polyline.
 
-	double x[2];
-	double y[2];
-	x[0] = x1;
-	x[1] = x2;
-	y[0] = y1;
-	y[1] = y2;
-
 	if (_firstLineCall) {
 		_firstLineCall = false;
 		_xvals.push_back(x1);
