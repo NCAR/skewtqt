@@ -128,7 +128,7 @@ public:
    * a SkewtT and its SkewTQtAdapter already exist, delete them first. 
    */
   void newSkewT();
-  
+
   /**
    * this function is called when there is new data to be plotted. It assumes that
    * the data update is going to deliver 5 traces (variables), and they
@@ -221,7 +221,7 @@ protected:
   QLabel*          _title;            /// Title will be displayed here.
 
   datastore::DateTime _lastDataTime;  ///< The time of the most recent data on the plot
-		
+
   static const uint DefaultSymbolSize;
   static const std::string P_AXIS, T_AXIS, DP_AXIS, WS_AXIS, WD_AXIS;
 };

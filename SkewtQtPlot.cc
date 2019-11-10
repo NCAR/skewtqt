@@ -53,17 +53,17 @@ SkewtQtPlot(const PlotCreateToken& pc) :
   }
 
   // create our layouts
-  QVBoxLayout* mainLayout	     = new QVBoxLayout;
-  QBoxLayout* titleLayout	     = new QHBoxLayout;
-  _plotLayout	            	 = new QVBoxLayout;
-  QVBoxLayout* statusLayout    = new QVBoxLayout;
-  QHBoxLayout* dataLayout	     = new QHBoxLayout;
-  QBoxLayout* pointCountLayout = new QHBoxLayout;
-  QBoxLayout* presLayout	     = new QHBoxLayout;
-  QBoxLayout* tdryLayout	     = new QHBoxLayout;
-  QBoxLayout* dpLayout	     = new QHBoxLayout;
-  QBoxLayout* wspdLayout	     = new QHBoxLayout;
-  QBoxLayout* wdirLayout	     = new QHBoxLayout;
+  QVBoxLayout* mainLayout	= new QVBoxLayout;
+  QBoxLayout* titleLayout	= new QHBoxLayout;
+  _plotLayout			= new QVBoxLayout;
+  QVBoxLayout* statusLayout	= new QVBoxLayout;
+  QHBoxLayout* dataLayout	= new QHBoxLayout;
+  QBoxLayout* pointCountLayout	= new QHBoxLayout;
+  QBoxLayout* presLayout	= new QHBoxLayout;
+  QBoxLayout* tdryLayout	= new QHBoxLayout;
+  QBoxLayout* dpLayout		= new QHBoxLayout;
+  QBoxLayout* wspdLayout	= new QHBoxLayout;
+  QBoxLayout* wdirLayout	= new QHBoxLayout;
 
   // Set our layout for Plot::QWidget.
   this->setLayout(mainLayout);
@@ -215,7 +215,7 @@ getPixmap()
   // set the title string
   QString title = getDomain()->simpleString().c_str();
 
-  // figure how many vertical pixels we need to display the title 
+  // figure how many vertical pixels we need to display the title
   int textHeight = metrics.boundingRect(title).height();
 
   // determine final pixmap dimensions
@@ -235,7 +235,7 @@ getPixmap()
   // render the title string at the top
   painter.setPen(Qt::black);
   painter.setFont(font);
-  painter.drawText(QRect(0,0,finalWidth, titlePad+textHeight), 
+  painter.drawText(QRect(0,0,finalWidth, titlePad+textHeight),
 	  Qt::AlignCenter | Qt::AlignTop, title);
 
   // copy the skewt into the bottom of the pixmap
@@ -247,7 +247,7 @@ getPixmap()
 
 /* -------------------------------------------------------------------- */
 void
-SkewtQtPlot::newSkewT() 
+SkewtQtPlot::newSkewT()
 {
   DLOG << "newSkewT";
 
@@ -271,7 +271,7 @@ SkewtQtPlot::newSkewT()
 
   _pSkewT = new skewt::SkewT(*_pSkewTAdapter, 0, 0, 0, 0, 0, 0, 30, "", "", "");
 
-  // Tell the adapter who the skewt is, so that it can be called by the adapter 
+  // Tell the adapter who the skewt is, so that it can be called by the adapter
   // when the adapter detects a zoom.
   _pSkewTAdapter->setSkewT(_pSkewT);
 
@@ -322,7 +322,7 @@ SkewtQtPlot::changeTraceWidth()
 }
 
 /* -------------------------------------------------------------------- */
-void 
+void
 SkewtQtPlot::
 replot(datastore::DataNotice dn)
 {
@@ -349,7 +349,7 @@ replot(datastore::DataNotice dn)
 
   int nData = 0;
   // iterate over all of the variables, collecting the data.
-  // If we don't get the same number of points for each trace, 
+  // If we don't get the same number of points for each trace,
   // just abandon this update.
   for (size_t i = 0; i < dlist[0]->_axisList.size(); i++)
   {
@@ -393,7 +393,7 @@ replot(datastore::DataNotice dn)
 
   // find the oldest new data that hasn't been plotted
   int index;
-  for (index = nData-1; index >=0; index--) { 
+  for (index = nData-1; index >=0; index--) {
     if (times[index] <= _lastDataTime)
       break;
   }
@@ -401,7 +401,7 @@ replot(datastore::DataNotice dn)
 
   if (index < nData) {
     // plot data values for times that we haven't seen previously.
-    for (int k = index; k < nData; k++) { 
+    for (int k = index; k < nData; k++) {
       _pSkewT->drawTdry(pres[k], tdry[k]);
       _pSkewT->drawDp(pres[k],   dp[k]);
       _pSkewT->drawWind(pres[k], wspd[k], wdir[k]);
@@ -423,7 +423,7 @@ replot(datastore::DataNotice dn)
 }
 
 /* -------------------------------------------------------------------- */
-void 
+void
 SkewtQtPlot::print(QPrinter *printer)
 {
   // set the title string
@@ -539,7 +539,7 @@ void SkewtQtPlot::popupPlotContextMenu()
 }
 
 /* -------------------------------------------------------------------- */
-bool 
+bool
 SkewtQtPlot::eventFilter(QObject *object, QEvent *e)
 {
   // catch the right mouse button press, and popup

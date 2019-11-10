@@ -109,13 +109,13 @@ namespace skewt {
 	public:
 
 		/**
-		* Construct the adapter.
-		* @param parent The parent for the QWidget.
-		* @param h The height of drawing area. if -1, use the height of _skewtFrame on the Aspen SkewtView
-        * @param w The width of drawing area, if -1, use the width of _skewtFrame on the Aspen SkewtView
-		* @param symbolSize The size, in pixels, that symbols will be drawn at.
-		* @param resizeHoldOffMs The delay time, after a resize event, before a paint event can be performed.
-		*/
+		 * Construct the adapter.
+		 * @param parent The parent for the QWidget.
+		 * @param h The height of drawing area. if -1, use the height of _skewtFrame on the Aspen SkewtView
+		 * @param w The width of drawing area, if -1, use the width of _skewtFrame on the Aspen SkewtView
+		 * @param symbolSize The size, in pixels, that symbols will be drawn at.
+		 * @param resizeHoldOffMs The delay time, after a resize event, before a paint event can be performed.
+		 */
 		SkewTAdapterQt(QWidget* parent,
 				       int h = -1,
 				       int w = -1,
@@ -135,9 +135,9 @@ namespace skewt {
 		void print() {};
 
 		/**
-		* If the current _title is empty, and title is non-empty, tempporarily set
-		* _title=title for the printing.
-		**/
+		 * If the current _title is empty, and title is non-empty, tempporarily set
+		 * _title=title for the printing.
+		 */
 		void print(QPrinter* printer, std::string title);
 
 		double aspectRatio();
@@ -164,9 +164,9 @@ namespace skewt {
 		void setSymbolSize(int s)	{ _symbolSize = s; }
 
 		/**
-		* This function is clever. It tracks the incoming requests,
-		* and consolidates them into a single polyline when  possible.
-		*/
+		 * This function is clever. It tracks the incoming requests,
+		 * and consolidates them into a single polyline when  possible.
+		 */
 		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
 
 		void savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType);
@@ -177,82 +177,84 @@ namespace skewt {
 		/**
 		 * Draw symbols at the data points for tdry and dp
 		 * @param flag True if yes, false if no.
-		*/
+		 */
 		void markPoints (bool flag);
 		/**
 		 * Draw lines between the data points for tdry and dp
 		 * @param flag True if yes, false if no.
-		*/
+		 */
 		void drawLines(bool flag);
 
 	protected slots:
 		/**
-		* This slot is called when the resize event timer has completed.
-		*/
+		 * This slot is called when the resize event timer has completed.
+		 */
 		void resizeTimeout();
 
 	protected:
-        /**
-        * A little helper class which carries along extra information
-        * that contain some rendering state. This is useful for managing
-        * incremental plotting of the various elements of the plot.
-        */
-        template <class T> 
-        class VectorPlus: public std::vector<T> {
-        public:
-            /// Consructor
-            VectorPlus() {
-                _next = 0;
-            };
-            /// Destructor
-            virtual ~VectorPlus() {};
-            /// remove all items and reset the next draw index.
-            virtual void clear() {
-                _next = 0; 
-                std::vector<T>::clear();
-            };
-            /// The next item in the vector that needs to be drawn.
-            /// The rendering routine will start at this index,
-            /// render all objects up to the end of the vector,
-            /// and set this to one plus the last index. 
-            /// Routines that want to force rendering from the beginning
-            /// such as after a zoom or resize, will reset this to zero.
-            int _next;
-        };
+		/**
+		 * A little helper class which carries along extra information
+		 * that contain some rendering state. This is useful for managing
+		 * incremental plotting of the various elements of the plot.
+		 */
+		template <class T>
+		class VectorPlus: public std::vector<T> {
+		public:
+			/// Consructor
+			VectorPlus() {
+				_next = 0;
+			};
+			/// Destructor
+			virtual ~VectorPlus() {};
+			/// remove all items and reset the next draw index.
+			virtual void clear() {
+				_next = 0;
+				std::vector<T>::clear();
+			};
+			/**
+			 * The next item in the vector that needs to be drawn.
+			 * The rendering routine will start at this index,
+			 * render all objects up to the end of the vector,
+			 * and set this to one plus the last index.
+			 * Routines that want to force rendering from the beginning
+			 * such as after a zoom or resize, will reset this to zero.
+			 */
+			int _next;
+		};
 
 		/**
-		* A text graphic element.
-		*/
+		 * A text graphic element.
+		 */
 		class SkewTQtText {
 		public:
 			/**
-			* Constructor.
-			* @param text The text.
-			* @param x The x location.
-			* @param y The y location
-			* @param pen The pen for drawing the text.
-			* @param alignFlag An alignment flag.
-			* @todo Implement the alignment flag.
-			*/
+			 * Constructor.
+			 * @param text The text.
+			 * @param x The x location.
+			 * @param y The y location
+			 * @param pen The pen for drawing the text.
+			 * @param alignFlag An alignment flag.
+			 * @todo Implement the alignment flag.
+			 */
 			SkewTQtText(std::string text, double x, double y, QPen pen, int alignFlag);
 			/**
-			* Default constructor
-			*/
+			 * Default constructor
+			 */
 			SkewTQtText();
 			/**
-			* Destructor
-			*/
+			 * Destructor
+			 */
 			virtual ~SkewTQtText();
-			/** 
-			* @return The size of the text
-			**/
+			/**
+			 * @return The size of the text
+			 */
 			int size();
 			/**
-			* Draw the text.
-			* @param painter The device to draw on.
-			* @param width The width of the drawing area.
-			* @param height The height of the drawing area.
-			*/
+			 * Draw the text.
+			 * @param painter The device to draw on.
+			 * @param width The width of the drawing area.
+			 * @param height The height of the drawing area.
+			 */
 			void draw(QPainter& painter, int width, int height);
 		protected:
 			std::string   _text;
@@ -263,29 +265,29 @@ namespace skewt {
 		};
 
 		/**
-		* A polyline graphic element. It contains a series of points which will
-		* be connected by a line,
-		*/
+		 * A polyline graphic element. It contains a series of points which will
+		 * be connected by a line,
+		 */
 		class SkewTQtPolyline {
 		public:
 			/**
-			* Constructor.
-			* @param x The x locations.
-			* @param y The y locations
-			* @param pen The pen for drawing the text.
-			*/
+			 * Constructor.
+			 * @param x The x locations.
+			 * @param y The y locations
+			 * @param pen The pen for drawing the text.
+			 */
 			SkewTQtPolyline(std::vector<double> x, std::vector<double> y, QPen pen);
 			/**
 			* Destructor
 			*/
 			virtual ~SkewTQtPolyline();
 			/**
-			* Draw the polyline.
-			* @param painter The device to draw on.
-			* @param width The width of the drawing area.
-			* @param height The height of the drawing area.
-			* @todo Implement dashed line drawing.
-			*/
+			 * Draw the polyline.
+			 * @param painter The device to draw on.
+			 * @param width The width of the drawing area.
+			 * @param height The height of the drawing area.
+			 * @todo Implement dashed line drawing.
+			 */
 			void draw(QPainter& painter, int width, int height);
 		protected:
 			std::vector<double> _x;   ///< The x values.
@@ -294,31 +296,31 @@ namespace skewt {
 		};
 
 		/**
-		* A graphic element, used to represent a data point. A collection
-		* of SkewTQtDatum will represent the tdry trace; another collection
-		* will represent the dew point trace.
-		*/
+		 * A graphic element, used to represent a data point. A collection
+		 * of SkewTQtDatum will represent the tdry trace; another collection
+		 * will represent the dew point trace.
+		 */
 		class SkewTQtDatum {
 		public:
 			/**
-			* Constructor.
-			* @param x The x location.
-			* @param y The y location
-			* @param size The size of the symbol, in pixels.
-			* @param pen The pen for drawing the datum.
-			* @param brush The brush for drawing the datum. This establishes the fill pattern..
-			*/
+			 * Constructor.
+			 * @param x The x location.
+			 * @param y The y location
+			 * @param size The size of the symbol, in pixels.
+			 * @param pen The pen for drawing the datum.
+			 * @param brush The brush for drawing the datum. This establishes the fill pattern..
+			 */
 			SkewTQtDatum(double x, double y, int size, QPen pen, QBrush brush);
 			/**
-			* Destructor.
-			*/
+			 * Destructor.
+			 */
 			virtual ~SkewTQtDatum();
 			/**
-			* Draw the datum.
-			* @param painter The device to draw on.
-			* @param width The width of the drawing area.
-			* @param height The height of the drawing area.
-			*/
+			 * Draw the datum.
+			 * @param painter The device to draw on.
+			 * @param width The width of the drawing area.
+			 * @param height The height of the drawing area.
+			 */
 			void draw(QPainter& painter, int width, int height);
 			/**
 			 * @return The x coordinate
@@ -337,66 +339,66 @@ namespace skewt {
 		};
 
 		/**
-		* Called by Qt when there is a paint event. The pixmap 
-        * will be copied to the widget.
-		* @param e The paint event
-		*/
+		 * Called by Qt when there is a paint event. The pixmap
+		 * will be copied to the widget.
+		 * @param e The paint event
+		 */
 		void                paintEvent(QPaintEvent *e);
 		/**
-		* Called by Qt when there is a resize event. The dontPaint flag is set true, and
-		* a timer is initiated. When the timer completes, the dontPaint flag is cleared,
-        * the skewt elements are rendered into the pixmap, and an update() is called to 
-        * generate a paint event.
-		*@param e Resize event.
-		*/
+		 * Called by Qt when there is a resize event. The dontPaint flag is set true, and
+		 * a timer is initiated. When the timer completes, the dontPaint flag is cleared,
+		 * the skewt elements are rendered into the pixmap, and an update() is called to
+		 * generate a paint event.
+		 * @param e Resize event.
+		 */
 		void                resizeEvent(QResizeEvent *e);
 		/**
-		* Called when the user presses the mouse.
-		*/
+		 * Called when the user presses the mouse.
+		 */
 		void mousePressEvent( QMouseEvent* e);
 		/**
-		* Called when the user releases the mouse.
-		*/
+		 * Called when the user releases the mouse.
+		 */
 		void mouseReleaseEvent( QMouseEvent* e );
 		/**
-		* Called as then mouse is dragged.
-		*/
+		 * Called as then mouse is dragged.
+		 */
 		void mouseMoveEvent( QMouseEvent* e );
 		/**
-		* Draw the rubberband rectangle as the mouse is dragged.
-		*/
+		 * Draw the rubberband rectangle as the mouse is dragged.
+		 */
 		void drawBoundingRect( QRubberBand* p, const QPoint& p1, const QPoint& p2 );
 		/**
-		* Return the QColor equivalent of the SkewT color code. See SkewTdefs.h
-		* @return The coresponding QColor.
-		*/
+		 * Return the QColor equivalent of the SkewT color code. See SkewTdefs.h
+		 * @return The coresponding QColor.
+		 */
 		QColor              getQColor(unsigned int colorCode);
 		/**
-		* draw all of the graphic elements.
-        * @param selective True if only the most recently received objects should be rendered.
-        * This give performance gains when incrementally adding points for large datasets.
-		*/
-		void                drawElements(bool selective=false);		
+		 * draw all of the graphic elements.
+		 * @param selective True if only the most recently received objects should be rendered.
+		 * This give performance gains when incrementally adding points for large datasets.
+		 */
+		void                drawElements(bool selective=false);
 		/**
-		* Draw all of the graphic elements to a printer.
-        * @param printer The printer to draw to.
-		*/
+		 * Draw all of the graphic elements to a printer.
+		 * @param printer The printer to draw to.
+		 */
 		void                drawElements(QPrinter* printer);
 		/**
 		 * Draw a line segment.
-		* @param painter The device to draw on.
-		* @param pen The drawing pen
-		* @param x1 The virtual x location of the begin point
-		* @param y1 The virtual y location of the begin point
-		* @param x2 The virtual x location of the end point
-		* @param y2 The virtual y location of the end point
-		* @param width The width of the drawing area.
-		* @param height The height of the drawing area.
-		*/
+		 * @param painter The device to draw on.
+		 * @param pen The drawing pen
+		 * @param x1 The virtual x location of the begin point
+		 * @param y1 The virtual y location of the begin point
+		 * @param x2 The virtual x location of the end point
+		 * @param y2 The virtual y location of the end point
+		 * @param width The width of the drawing area.
+		 * @param height The height of the drawing area.
+		 */
 		void drawLine(QPainter& painter, QPen pen, double x1, double y1, double x2, double y2, int width, int height);
 		/**
-		* remove all of the graphic elements.
-		*/
+		 * remove all of the graphic elements.
+		 */
 		void                removeElements();
 
 		QPixmap* _pixmap; ///< All drawing will be rendered here, and this will be copied to the widget in paintEvent()
@@ -441,13 +443,13 @@ namespace skewt {
 		/// The dimension of the adapter (i.e. drawing area).  For drawing on computer
 		/// screen, it will be the dimension of the drawing frame on the Aspen SkewtView.
 		/// For drawing on a pixmap, it will be the given dimension of the pixmap.
-        int 				_height; 				  ///< Adapter (drawing area) height
-        int 				_width; 				  ///< Adapter (drawing area) width
-        /// When saving the skewt plot, the skewt is drawn on a given drawing area (the
-        /// _height and _width are given), so its aspect ratio is given. But when drawing
-        /// on computer (on Aspen SkewtView), the aspect ratio of the drawing area has to
-        /// be determined at the time of drawing (therefore it is not given)
-        bool                _givenRatio;			  ///< Ture if aspect ratio of drawing area is given.
+	        int		_height;		  ///< Adapter (drawing area) height
+	        int		_width;			  ///< Adapter (drawing area) width
+		/// When saving the skewt plot, the skewt is drawn on a given drawing area (the
+		/// _height and _width are given), so its aspect ratio is given. But when drawing
+		/// on computer (on Aspen SkewtView), the aspect ratio of the drawing area has to
+		/// be determined at the time of drawing (therefore it is not given)
+	        bool		_givenRatio;		  ///< Ture if aspect ratio of drawing area is given.
 	};
 }
 
