@@ -305,8 +305,8 @@ SkewTAdapterQt::drawElements(bool selective)
 //////////////////////////////////////////////////////////////////////
 void SkewTAdapterQt::drawElements(QPrinter* printer)
 {
-	QRect rect = printer->pageRect();
-	
+	QRectF rect = printer->pageRect(QPrinter::DevicePixel);
+
 	int h = rect.height();
 	int w = rect.width();
 
