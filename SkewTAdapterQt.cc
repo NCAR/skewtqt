@@ -594,7 +594,7 @@ QColor SkewTAdapterQt::getQColor(unsigned int colorCode)
 }
 
 //////////////////////////////////////////////////////////////////////
-void SkewTAdapterQt::resizeEvent( QResizeEvent *e )
+void SkewTAdapterQt::resizeEvent(QResizeEvent*)
 {
 	// set the dontPaint flag, to prohibit repaints until the resizing is finished.
 	_dontPaint = true;
@@ -617,7 +617,7 @@ void SkewTAdapterQt::resizeTimeout()
 }
 
 //////////////////////////////////////////////////////////////////////
-void SkewTAdapterQt::paintEvent( QPaintEvent *e )
+void SkewTAdapterQt::paintEvent(QPaintEvent*)
 {
 	// if painting is allowed, redraw the whole thing.
 	if (!_dontPaint) {
