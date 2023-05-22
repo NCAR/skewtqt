@@ -488,7 +488,8 @@ void SkewTAdapterQt::drawLines(bool flag)
 void SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType)
 {
 	// redraw all of the graphic elements.
-	QPixmap* pixmap = new QPixmap(xPixels, yPixels);
+	QPixmap s_pixmap(xPixels, yPixels);
+	QPixmap* pixmap = &s_pixmap;
 	pixmap->fill();
 	_pLines._next     = 0;
 	_tdryPoints._next = 0;
