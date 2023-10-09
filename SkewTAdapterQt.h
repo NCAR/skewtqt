@@ -146,7 +146,7 @@ namespace skewt {
 
 		void title(std::string s);
 
-		void symbol(double x, double y, unsigned int color, SymType st = SmallPlus);
+		void symbol(double x, double y, unsigned int color);
 
 		void Text(const std::string& s, const double x, const double y, unsigned int color);
 
@@ -167,7 +167,7 @@ namespace skewt {
 		 * This function is clever. It tracks the incoming requests,
 		 * and consolidates them into a single polyline when  possible.
 		 */
-		void line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType = SkewTAdapter::SolidLine);
+		void line(double x1, double y1, double x2, double y2, unsigned int colorCode);
 
 		void savePlot(std::string path, int xPixels, int yPixels, PlotFileType fileType);
 

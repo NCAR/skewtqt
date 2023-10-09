@@ -91,7 +91,7 @@ SkewTAdapterQt::~SkewTAdapterQt()
 
 //////////////////////////////////////////////////////////////////////
 void
-SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int colorCode, SkewTAdapter::LineType lineType)
+SkewTAdapterQt::line(double x1, double y1, double x2, double y2, unsigned int colorCode)
 {
 	// create polyline elements from the specified line segments. Save the polyline, and draw it.
 
@@ -433,7 +433,7 @@ void SkewTAdapterQt::extents(double &xmin, double &xmax, double &ymin, double &y
 }
 
 //////////////////////////////////////////////////////////////////////
-void SkewTAdapterQt::symbol(double x, double y, unsigned int colorCode, SymType st)
+void SkewTAdapterQt::symbol(double x, double y, unsigned int /*colorCode*/)
 {
 	// create the datum
 	SkewTQtDatum t(x, y, _symbolSize, _bluePen, _blueBrush);
