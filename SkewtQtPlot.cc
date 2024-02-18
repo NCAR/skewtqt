@@ -269,7 +269,7 @@ SkewtQtPlot::newSkewT()
 
   QSizePolicy ExpExp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-  _pSkewTAdapter = new skewt::SkewTAdapterQt(this, symbolSize);
+  _pSkewTAdapter = new skewt::SkewTAdapterQt(this, -1, -1, symbolSize);
   _pSkewTAdapter->show();
   _pSkewTAdapter->setSizePolicy(ExpExp);
   _pSkewTAdapter->installEventFilter(this);
@@ -407,9 +407,16 @@ replot(datastore::DataNotice dn)
   if (index < nData) {
     // plot data values for times that we haven't seen previously.
     for (int k = index; k < nData; k++) {
-      _pSkewT->drawTdry(pres[k], tdry[k]);
-      _pSkewT->drawDp(pres[k],   dp[k]);
-      _pSkewT->drawWind(pres[k], wspd[k], wdir[k]);
+      if (
+        !netcdfFillValue(pres[k]) &&
+        !netcdfFillValue(tdry[k]) &&
+        !netcdfFillValue(dp[k])&&
+        !netcdfFillValue(wspd[k]) && 
+        !netcdfFillValue(wdir[k])) {
+          _pSkewT->drawTdry(pres[k], tdry[k]);
+          _pSkewT->drawDp(pres[k], dp[k]);
+          _pSkewT->drawWind(pres[k], wspd[k], wdir[k]);
+      }
     }
 
     _title->setText(getDomain()->simpleString().c_str());
@@ -559,4 +566,10 @@ SkewtQtPlot::eventFilter(QObject *object, QEvent *e)
     }
   }
   return QObject::eventFilter(object, e);
+}
+
+/* -------------------------------------------------------------------- */
+bool
+SkewtQtPlot::netcdfFillValue(double val) {
+  return (lround(val) == -32767);
 }

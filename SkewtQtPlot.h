@@ -159,6 +159,19 @@ public:
   virtual void print(QPrinter *printer);
 
   /**
+   * @brief Test for netcdf fill value.
+   * 
+   * The nimbus netcdf file uses -32767.0f as a fill (missing) value.
+   * These get delivered to the plot.
+   * 
+   * @param val The value to be tested.
+   * @return true If it is a fill value.
+   * @return false If it is not a fill value.
+   */
+  bool netcdfFillValue(double val);
+
+
+  /**
    * Return the widget that has just the skew-t plot in it. 
    * This can be useful, say if you want to print or save a 
    * graphics file from just the skewt area of SkewtQtPlot.
