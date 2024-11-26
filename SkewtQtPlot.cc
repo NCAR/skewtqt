@@ -207,12 +207,7 @@ getPixmap()
   QFontMetrics metrics(font);
 
   // get the skewt pixmap
-#ifdef SKEWTQT5
   QPixmap skewt = skewtWidget()->grab();
-#else
-  // Qt4 and prior.
-  QPixmap skewt = QPixmap::grabWidget(this->skewtWidget());
-#endif
 
   // set the number of pixels above and below the title text
   int titlePad = 5;
@@ -305,15 +300,9 @@ SkewtQtPlot::changeTraceWidth()
 
   bool  ok;
 
-#ifdef SKEWTQT5
   width = QInputDialog::getInt(this,
 			       "Set symbol size", "Symbol size (pixels):",
 			       width, 0, 100, 1, &ok );
-#else
-  width = QInputDialog::getInteger(this,
-		"Set symbol size", "Symbol size (pixels):",
-		width, 0, 100, 1, &ok );
-#endif
 
   if (ok)
   {

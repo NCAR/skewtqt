@@ -5,19 +5,11 @@
 #include "SkewTAdapterQt.h"
 #include "SkewT/SkewTdefs.h"
 
-#ifdef SKEWTQT5
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPolygon>
 #include <QtPrintSupport/QPrinter>
 #include <QtWidgets/QRubberBand>
 #include <QtWidgets/QApplication>
-#else
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPolygon>
-#include <QtGui/QPrinter>
-#include <QtGui/QRubberBand>
-#include <QtGui/QApplication>
-#endif
 
 #include <iostream>
 
@@ -559,41 +551,48 @@ void SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFi
 
 	// trigger a repaint event.
 	update();
-  
-  	// save the pixmap
-  	if (fileType == SkewTAdapter::PNG)
-  		pixmap->save(QString(path.c_str()), "PNG");
-  	else if (fileType == SkewTAdapter::JPG)
-  		pixmap->save(QString(path.c_str()), "JPEG");  	
+
+	// save the pixmap
+	if (fileType == SkewTAdapter::PNG)
+		pixmap->save(QString(path.c_str()), "PNG");
+	else if (fileType == SkewTAdapter::JPG)
+		pixmap->save(QString(path.c_str()), "JPEG");
 }
 
 //////////////////////////////////////////////////////////////////////
 QColor SkewTAdapterQt::getQColor(unsigned int colorCode)
 {
 	QColor qcolor;
+	QString newColor;
+
 	switch (colorCode) {
 	case SKEWT_GREY:
-		qcolor.setNamedColor("grey");
+		newColor = "grey";
 		break;
 
 	case SKEWT_RED:
-		qcolor.setNamedColor("red");
+		newColor = "red";
 		break;
 
 	case SKEWT_GREEN:
-		qcolor.setNamedColor("green");
+		newColor = "green";
 		break;
 
 	case SKEWT_BLUE:
-		qcolor.setNamedColor("blue");
+		newColor = "blue";
 		break;
 
 	default:
 	case SKEWT_BLACK:
-		qcolor.setNamedColor("black");
+		newColor = "black";
 		break;
 	}
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	qcolor.setNamedColor(newColor);
+#else
+	qcolor.fromString(newColor);
+#endif
 	return qcolor;
 }
 
@@ -616,7 +615,7 @@ void SkewTAdapterQt::resizeTimeout()
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	if (_pSkewT)
 		_pSkewT->resize();
-	drawElements(); 
+	drawElements();
 	QApplication::restoreOverrideCursor();
 }
 
@@ -624,12 +623,12 @@ void SkewTAdapterQt::resizeTimeout()
 void SkewTAdapterQt::paintEvent(QPaintEvent*)
 {
 	// if painting is allowed, redraw the whole thing.
-	if (!_dontPaint) {
-    	if (_ready) {
-        	QPainter p(this);
-          	p.drawPixmap(0,0, *_pixmap);
-          	p.end();
-      	}
+    if (!_dontPaint) {
+	if (_ready) {
+		QPainter p(this);
+		p.drawPixmap(0,0, *_pixmap);
+		p.end();
+	}
     }
 }
 

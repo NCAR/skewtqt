@@ -9,19 +9,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#ifdef SKEWTQT5
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
 #include <QtPrintSupport/QPrinter>
 #include <QtGui/QPen>
 #include <QtWidgets/QWidget>
-#else
-#include <QtCore/QTimer>
-#include <QtGui/QPainter>
-#include <QtGui/QPrinter>
-#include <QtGui/QPen>
-#include <QtGui/QWidget>
-#endif
 
 #include "SkewT/SkewT.h"
 #include "SkewT/SkewTAdapter.h"
