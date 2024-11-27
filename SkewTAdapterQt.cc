@@ -562,7 +562,6 @@ void SkewTAdapterQt::savePlot(std::string path, int xPixels, int yPixels, PlotFi
 //////////////////////////////////////////////////////////////////////
 QColor SkewTAdapterQt::getQColor(unsigned int colorCode)
 {
-	QColor qcolor;
 	QString newColor;
 
 	switch (colorCode) {
@@ -588,12 +587,7 @@ QColor SkewTAdapterQt::getQColor(unsigned int colorCode)
 		break;
 	}
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	qcolor.setNamedColor(newColor);
-#else
-	qcolor.fromString(newColor);
-#endif
-	return qcolor;
+	return QColor (newColor);
 }
 
 //////////////////////////////////////////////////////////////////////
