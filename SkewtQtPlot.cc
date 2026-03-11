@@ -44,7 +44,6 @@ SkewtQtPlot(const PlotCreateToken& pc) :
 {
 
   QSizePolicy MinMin(QSizePolicy::Minimum, QSizePolicy::Minimum);
-  QSizePolicy ExpExp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
   if (layout()) {
     // get rid of the Plot::QWidget layout, if it has one,
